@@ -37,7 +37,6 @@ describe('AppController (e2e)', () => {
         results.forEach(r => {
           r.date = new Date(r.date);
           expect(r).toMatchObject({
-            id: expect.any(Number),
             description: expect.any(String),
             amount: expect.any(Number),
             date: expect.any(Date),
@@ -60,7 +59,6 @@ describe('AppController (e2e)', () => {
         results.forEach(r => {
           r.date = new Date(r.date);
           expect(r).toMatchObject({
-            id: expect.any(Number),
             description: expect.any(String),
             amount: expect.any(Number),
             date: expect.any(Date),
@@ -83,7 +81,6 @@ describe('AppController (e2e)', () => {
 
         results.date = new Date(results.date);
         expect(results).toMatchObject({
-          id: expect.any(Number),
           description: expect.any(String),
           amount: 30,
           date: expect.any(Date),
@@ -104,7 +101,6 @@ describe('AppController (e2e)', () => {
 
         results.date = new Date(results.date);
         expect(results).toMatchObject({
-          id: expect.any(Number),
           description: expect.any(String),
           amount: 20,
           date: expect.any(Date),

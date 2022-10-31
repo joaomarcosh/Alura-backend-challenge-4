@@ -7,28 +7,32 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { Income } from './income.entity';
 import { IncomeService } from './income.service';
 import { CreateIncomeDTO } from './dtos/create-income.dto';
 import { UpdateIncomeDTO } from './dtos/update-income.dto';
-
+import { ReturnIncomeDTO } from './dtos/return-income.dto';
+//
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('income')
 export class IncomeController {
   constructor(private incomeService: IncomeService) {}
 
   @Get()
-  async findAll(): Promise<Income[]> {
+  async findAll(): Promise<ReturnIncomeDTO[]> {
     return await this.incomeService.findAll();
   }
 
   @Get(':id')
-  async findOneById(@Param('id', ParseIntPipe) id: number): Promise<Income> {
+  async findOneById(@Param('id', ParseIntPipe) id: number): Promise<ReturnIncomeDTO> {
     return await this.incomeService.findOneById(id);
   }
 
   @Post()
-  async create(@Body() income: CreateIncomeDTO | CreateIncomeDTO[]): Promise<Income[]> {
+  async create(@Body() income: CreateIncomeDTO | CreateIncomeDTO[]): Promise<ReturnIncomeDTO[]> {
     return await this.incomeService.create(income);
   }
 
@@ -36,7 +40,7 @@ export class IncomeController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() income: UpdateIncomeDTO,
-  ): Promise<Income> {
+  ): Promise<ReturnIncomeDTO> {
     return await this.incomeService.update(id, income);
   }
 

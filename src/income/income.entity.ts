@@ -6,10 +6,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 @Entity('income')
 @Check(`"amount" > 0`)
 export class Income {
+  @Exclude()
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,9 +24,11 @@ export class Income {
   @Column({ type: 'date' })
   date: Date;
 
+  @Exclude()
   @CreateDateColumn()
   createdAt: Date;
 
+  @Exclude()
   @UpdateDateColumn()
   updatedAt: Date;
 }

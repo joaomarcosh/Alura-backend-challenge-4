@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Income } from './income.entity';
 import { CreateIncomeDTO } from './dtos/create-income.dto';
 import { UpdateIncomeDTO } from './dtos/update-income.dto';
+import { ReturnIncomeDTO } from './dtos/return-income.dto';
 
 @Injectable()
 export class IncomeService {
@@ -12,15 +13,15 @@ export class IncomeService {
     private IncomeRepository: Repository<Income>,
   ) {}
 
-  async findAll(): Promise<Income[]> {
+  async findAll(): Promise<ReturnIncomeDTO[]> {
     return await this.IncomeRepository.find();
   }
 
-  async findOneById(id: number): Promise<Income> {
+  async findOneById(id: number): Promise<ReturnIncomeDTO> {
     return await this.IncomeRepository.findOneBy({ id });
   }
 
-  async create(income: CreateIncomeDTO | CreateIncomeDTO[]): Promise<Income[]> {
+  async create(income: CreateIncomeDTO | CreateIncomeDTO[]): Promise<ReturnIncomeDTO[]> {
     const insertResult = await this.IncomeRepository.insert(income);
     const createdIncome = await this.IncomeRepository.find({
       where: [...insertResult.identifiers],
@@ -28,7 +29,7 @@ export class IncomeService {
     return createdIncome;
   }
 
-  async update(id: number, income: UpdateIncomeDTO): Promise<Income> {
+  async update(id: number, income: UpdateIncomeDTO): Promise<ReturnIncomeDTO> {
     await this.IncomeRepository.update(id, income);
     return await this.IncomeRepository.findOneBy({ id });
   }
