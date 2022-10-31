@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Income } from './income.entity';
+import { CreateIncomeDTO } from './dtos/create-income.dto';
 
 @Injectable()
 export class IncomeService {
@@ -18,7 +19,7 @@ export class IncomeService {
     return await this.IncomeRepository.findOneBy({ id });
   }
 
-  async create(income: Income): Promise<Income[]> {
+  async create(income: CreateIncomeDTO): Promise<Income[]> {
     const insertResult = await this.IncomeRepository.insert(income);
     const createdIncome = await this.IncomeRepository.find({
       where: [...insertResult.identifiers],
