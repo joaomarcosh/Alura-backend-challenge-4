@@ -13,6 +13,7 @@ import { IncomeModule } from './income/income.module';
       password: 'pgpassword',
       database: 'alura',
       entities: [Income],
+      dropSchema: true,
       synchronize: true,
       autoLoadEntities: true,
     }),
