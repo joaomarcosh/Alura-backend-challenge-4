@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
+import { ValidationPipe } from '@nestjs/common';
 import { mockIncome, mockReturnedIncome, mockUpdatedIncome } from '../src/income/tests/income-data.mock';
 
 describe('AppController (e2e)', () => {
@@ -16,6 +17,7 @@ describe('AppController (e2e)', () => {
     app = moduleRef.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),
     );
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
   });
@@ -27,10 +29,10 @@ describe('AppController (e2e)', () => {
         url: '/income',
         payload: [mockIncome,mockIncome],
       })
-      .then((result) => {
-        expect(result.statusCode).toEqual(201);
+      .then((response) => {
+        expect(response.statusCode).toEqual(201);
         
-        const results = JSON.parse(result.payload);
+        const results = JSON.parse(response.payload);
 
         results.forEach(r => {
           r.date = new Date(r.date);
@@ -50,10 +52,10 @@ describe('AppController (e2e)', () => {
         method: 'GET',
         url: '/income',
       })
-      .then((result) => {
-        expect(result.statusCode).toEqual(200);
+      .then((response) => {
+        expect(response.statusCode).toEqual(200);
         
-        const results = JSON.parse(result.payload);
+        const results = JSON.parse(response.payload);
 
         results.forEach(r => {
           r.date = new Date(r.date);
@@ -74,10 +76,10 @@ describe('AppController (e2e)', () => {
         url: '/income/1',
         payload: { amount: 30 },
       })
-      .then((result) => {
-        expect(result.statusCode).toEqual(200);
+      .then((response) => {
+        expect(response.statusCode).toEqual(200);
         
-        const results = JSON.parse(result.payload);
+        const results = JSON.parse(response.payload);
 
         results.date = new Date(results.date);
         expect(results).toMatchObject({
@@ -95,10 +97,10 @@ describe('AppController (e2e)', () => {
         method: 'GET',
         url: '/income/2',
       })
-      .then((result) => {
-        expect(result.statusCode).toEqual(200);
+      .then((response) => {
+        expect(response.statusCode).toEqual(200);
         
-        const results = JSON.parse(result.payload);
+        const results = JSON.parse(response.payload);
 
         results.date = new Date(results.date);
         expect(results).toMatchObject({
@@ -116,10 +118,10 @@ describe('AppController (e2e)', () => {
         method: 'DELETE',
         url: '/income/2',
       })
-      .then((result) => {
-        expect(result.statusCode).toEqual(200);
+      .then((response) => {
+        expect(response.statusCode).toEqual(200);
 
-        expect(result.payload).toEqual('Income with id 2 deleted');
+        expect(response.payload).toEqual('Income with id 2 deleted');
       });
   });
   

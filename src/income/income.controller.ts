@@ -10,6 +10,8 @@ import {
 } from '@nestjs/common';
 import { Income } from './income.entity';
 import { IncomeService } from './income.service';
+import { CreateIncomeDTO } from './dtos/create-income.dto';
+import { UpdateIncomeDTO } from './dtos/update-income.dto';
 
 @Controller('income')
 export class IncomeController {
@@ -26,14 +28,14 @@ export class IncomeController {
   }
 
   @Post()
-  async create(@Body() income: Income): Promise<Income[]> {
+  async create(@Body() income: CreateIncomeDTO | CreateIncomeDTO[]): Promise<Income[]> {
     return await this.incomeService.create(income);
   }
 
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() income: Income,
+    @Body() income: UpdateIncomeDTO,
   ): Promise<Income> {
     return await this.incomeService.update(id, income);
   }

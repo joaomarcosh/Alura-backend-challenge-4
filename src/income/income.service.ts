@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Income } from './income.entity';
 import { CreateIncomeDTO } from './dtos/create-income.dto';
+import { UpdateIncomeDTO } from './dtos/update-income.dto';
 
 @Injectable()
 export class IncomeService {
@@ -19,7 +20,7 @@ export class IncomeService {
     return await this.IncomeRepository.findOneBy({ id });
   }
 
-  async create(income: CreateIncomeDTO): Promise<Income[]> {
+  async create(income: CreateIncomeDTO | CreateIncomeDTO[]): Promise<Income[]> {
     const insertResult = await this.IncomeRepository.insert(income);
     const createdIncome = await this.IncomeRepository.find({
       where: [...insertResult.identifiers],
@@ -27,7 +28,7 @@ export class IncomeService {
     return createdIncome;
   }
 
-  async update(id: number, income: Income): Promise<Income> {
+  async update(id: number, income: UpdateIncomeDTO): Promise<Income> {
     await this.IncomeRepository.update(id, income);
     return await this.IncomeRepository.findOneBy({ id });
   }
