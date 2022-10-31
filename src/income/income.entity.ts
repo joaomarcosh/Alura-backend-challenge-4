@@ -13,7 +13,7 @@ export class Income {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ default: 'no description' })
+  @Column()
   description: string;
 
   @Column({ type: 'real' })
