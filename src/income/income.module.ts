@@ -3,10 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Income } from './income.entity';
 import { IncomeService } from './income.service';
 import { IncomeController } from './income.controller';
+import { IncomeRepository } from './income.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Income])],
-  providers: [IncomeService],
+  providers: [IncomeService, IncomeRepository],
   controllers: [IncomeController],
 })
 export class IncomeModule {}
