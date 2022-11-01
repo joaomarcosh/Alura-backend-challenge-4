@@ -15,7 +15,7 @@ import { IncomeService } from './income.service';
 import { CreateIncomeDTO } from './dtos/create-income.dto';
 import { UpdateIncomeDTO } from './dtos/update-income.dto';
 import { ReturnIncomeDTO } from './dtos/return-income.dto';
-//
+
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('income')
 export class IncomeController {
@@ -32,7 +32,7 @@ export class IncomeController {
   }
 
   @Post()
-  async create(@Body() income: CreateIncomeDTO | CreateIncomeDTO[]): Promise<ReturnIncomeDTO[]> {
+  async create(@Body() income: CreateIncomeDTO): Promise<ReturnIncomeDTO[]> {
     return await this.incomeService.create(income);
   }
 

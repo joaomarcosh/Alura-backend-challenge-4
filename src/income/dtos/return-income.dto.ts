@@ -3,6 +3,6 @@ export class ReturnIncomeDTO {
   
   amount: number;
   
-  date: Date;
+  date: string;
 }
 

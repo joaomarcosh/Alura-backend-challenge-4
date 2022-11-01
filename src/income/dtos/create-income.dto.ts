@@ -10,5 +10,5 @@ export class CreateIncomeDTO {
   amount: number;
   
   @IsDateString()
-  date: Date;
+  date: string;
 }

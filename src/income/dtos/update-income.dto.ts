@@ -13,5 +13,5 @@ export class UpdateIncomeDTO {
   
   @IsOptional()
   @IsDateString()
-  date: Date;
+  date: string;
 }

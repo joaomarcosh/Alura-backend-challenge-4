@@ -22,7 +22,7 @@ export class Income {
   amount: number;
 
   @Column({ type: 'date' })
-  date: Date;
+  date: string;
 
   @Exclude()
   @CreateDateColumn()
