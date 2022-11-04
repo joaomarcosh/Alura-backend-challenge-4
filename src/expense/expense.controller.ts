@@ -10,7 +10,6 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { Expense } from './expense.entity';
 import { ExpenseService } from './expense.service';
 import { CreateExpenseDTO } from './dtos/create-expense.dto';
 import { UpdateExpenseDTO } from './dtos/update-expense.dto';
@@ -27,7 +26,9 @@ export class ExpenseController {
   }
 
   @Get(':id')
-  async findOneById(@Param('id', ParseIntPipe) id: number): Promise<ReturnExpenseDTO> {
+  async findOneById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ReturnExpenseDTO> {
     return await this.expenseService.findOneById(id);
   }
 
