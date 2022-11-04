@@ -19,18 +19,6 @@ describe('incomeService: ', () => {
   let incomeService;
 
   beforeEach(async () => {
-    /*const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        IncomeService,
-        {
-          provide: getRepositoryToken(Income),
-          useFactory: mockIncomeRepository,
-        },
-      ],
-    }).compile();
-
-    incomeRepository = module.get(getRepositoryToken(Income));
-    incomeService = module.get<IncomeService>(IncomeService);*/
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         IncomeService,
@@ -115,10 +103,21 @@ describe('incomeService: ', () => {
   
   describe('delete(): ', () => {    
     it('should return deleted income message', async () => {
+      incomeRepository.delete.mockResolvedValue({affected: 1})
+    
       const result = await incomeService.delete(1);
 
       expect(incomeRepository.delete).toHaveBeenCalledWith(1);
       expect(result).toEqual(`Income with id 1 deleted`);
+    });
+    
+    it('should return non existant income message', async () => {
+      incomeRepository.delete.mockResolvedValue({affected: 0})
+    
+      const result = await incomeService.delete(1);
+
+      expect(incomeRepository.delete).toHaveBeenCalledWith(1);
+      expect(result).toEqual(`Income with id 1 does not exist`);
     });
   });
 });

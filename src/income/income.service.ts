@@ -58,7 +58,7 @@ export class IncomeService {
 
   async delete(id: number): Promise<string> {
     const deleteResult = await this.incomeRepository.delete(id);
-    if (deleteResult.affected == 0) return `Id ${id} does not exist`;
+    if (deleteResult.affected == 0) return `Income with id ${id} does not exist`;
     return `Income with id ${id} deleted`;
   }
 }

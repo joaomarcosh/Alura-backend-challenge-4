@@ -110,5 +110,14 @@ describe('expenseService: ', () => {
       expect(expenseRepository.delete).toHaveBeenCalledWith(1);
       expect(result).toEqual(`Expense with id 1 deleted`);
     });
+    
+    it('should return non existant expense message', async () => {
+      expenseRepository.delete.mockResolvedValue({affected: 0})
+    
+      const result = await expenseService.delete(1);
+
+      expect(expenseRepository.delete).toHaveBeenCalledWith(1);
+      expect(result).toEqual(`Expense with id 1 does not exist`);
+    });
   });
 });
