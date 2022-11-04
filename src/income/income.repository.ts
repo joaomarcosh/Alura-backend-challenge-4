@@ -8,12 +8,13 @@ export class IncomeRepository extends Repository<Income> {
     super(Income, dataSource.createEntityManager());
   }
   
-  async isMonthlyUnique(description: string, month: string, year: string): Promise<boolean> {
+  async isMonthlyUnique(description: string, month: string, year: string, id: number = 0): Promise<boolean> {
     const result = await this.dataSource
-      .createQueryBuilder(/*'income'*/)
+      .createQueryBuilder()
       .select('income')
       .from(Income, 'income')
       .where('income.description = :description', { description })
+      .andWhere('income.id != :id', { id })
       .andWhere('EXTRACT("month" from  date) = :month', { month })
       .andWhere('EXTRACT("year" from date) = :year', { year })
       .getOne()

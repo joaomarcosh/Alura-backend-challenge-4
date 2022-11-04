@@ -39,15 +39,15 @@ export class IncomeService {
 
   async update(id: number, newInfo: UpdateIncomeDTO): Promise<ReturnIncomeDTO> {
     const oldInfo = await this.incomeRepository.findOneBy({ id });
-    
     const oldDate = oldInfo.date.split('-');
     const newDate = newInfo.date ? newInfo.date.split('-') : null;
     
     const desc = newInfo.description || oldInfo.description;
     const month = newDate ? newDate[1] : oldDate[1];
     const year = newDate ? newDate[0] : oldDate[0];
+    const oldId = oldInfo.id;
     
-    const unique = await this.incomeRepository.isMonthlyUnique(desc,month,year);
+    const unique = await this.incomeRepository.isMonthlyUnique(desc,month,year,oldId);
     
     if (!unique) throw new ConflictException('This income already exists for this month');
     
@@ -57,7 +57,8 @@ export class IncomeService {
   }
 
   async delete(id: number): Promise<string> {
-    await this.incomeRepository.delete(id);
+    const deleteResult = await this.incomeRepository.delete(id);
+    if (deleteResult.affected == 0) return `Id ${id} does not exist`;
     return `Income with id ${id} deleted`;
   }
 }

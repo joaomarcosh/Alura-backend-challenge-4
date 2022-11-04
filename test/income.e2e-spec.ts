@@ -5,7 +5,7 @@ import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { mockIncome, mockReturnedIncome, mockUpdatedIncome } from '../src/income/tests/income-data.mock';
 
-describe('AppController (e2e)', () => {
+describe('IncomeController (e2e)', () => {
   let app: NestFastifyApplication;
 
   beforeAll(async () => {
@@ -22,12 +22,13 @@ describe('AppController (e2e)', () => {
     await app.getHttpAdapter().getInstance().ready();
   });
   
-  it('/income (POST)', () => {
+  describe('/income (POST)', () => {
+    it('should return status 201 and created income', () => {
     return app
       .inject({
         method: 'POST',
         url: '/income',
-        payload: [mockIncome,mockIncome],
+        payload: mockIncome,
       })
       .then((response) => {
         expect(response.statusCode).toEqual(201);
@@ -43,9 +44,11 @@ describe('AppController (e2e)', () => {
           });
         });
       });
+    });
   });
   
-  it('/income (GET)', () => {
+  describe('/income (GET)', () => {
+    it('should return status 200 and all incomes', () => {
     return app
       .inject({
         method: 'GET',
@@ -65,9 +68,11 @@ describe('AppController (e2e)', () => {
           });
         });
       });
+    });
   });
   
-  it('/income/1 (PUT)', () => {
+  describe('/income/:id (PUT)', () => {
+    it('should return status 200 and updated income', () => {
     return app
       .inject({
         method: 'PUT',
@@ -86,13 +91,15 @@ describe('AppController (e2e)', () => {
           date: expect.any(Date),
         });
       });
+    });
   });
   
-  it('/income/2 (GET)', () => {
+  describe('/income/:id (GET)', () => {
+    it('should return status 200 and selected income', () => {
     return app
       .inject({
         method: 'GET',
-        url: '/income/2',
+        url: '/income/1',
       })
       .then((response) => {
         expect(response.statusCode).toEqual(200);
@@ -102,13 +109,28 @@ describe('AppController (e2e)', () => {
         results.date = new Date(results.date);
         expect(results).toMatchObject({
           description: expect.any(String),
-          amount: 20,
+          amount: 30,
           date: expect.any(Date),
         });
       });
+    });
   });
   
-  it('/income/2 (DELETE)', () => {
+  describe('/income/:id (DELETE)', () => {
+    it('should return status 200 and message about deleted income', () => {
+    return app
+      .inject({
+        method: 'DELETE',
+        url: '/income/1',
+      })
+      .then((response) => {
+        expect(response.statusCode).toEqual(200);
+
+        expect(response.payload).toEqual('Income with id 1 deleted');
+      });
+  });
+  
+  it('should return status 200 and message about non-existant id', () => {
     return app
       .inject({
         method: 'DELETE',
@@ -117,9 +139,11 @@ describe('AppController (e2e)', () => {
       .then((response) => {
         expect(response.statusCode).toEqual(200);
 
-        expect(response.payload).toEqual('Income with id 2 deleted');
+        expect(response.payload).toEqual('Id 2 does not exist');
       });
   });
+  });
+  
   
   afterAll(async () => {
     await app.close();
