@@ -5,7 +5,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { mockExpense } from '../src/expense/tests/expense-data.mock';
+import { mockExpense, mockExpenseWithoutCategory } from '../src/expense/tests/expense-data.mock';
 
 describe('ExpenseController (e2e)', () => {
   let app: NestFastifyApplication;
@@ -42,6 +42,31 @@ describe('ExpenseController (e2e)', () => {
             r.date = new Date(r.date);
             expect(r).toMatchObject({
               description: expect.any(String),
+              category: expect.any(String),
+              amount: expect.any(Number),
+              date: expect.any(Date),
+            });
+          });
+        });
+    });
+    
+    it('should return status 201 and created expense with category other', () => {
+      return app
+        .inject({
+          method: 'POST',
+          url: '/expense',
+          payload: mockExpenseWithoutCategory,
+        })
+        .then((response) => {
+          expect(response.statusCode).toEqual(201);
+
+          const results = JSON.parse(response.payload);
+
+          results.forEach((r) => {
+            r.date = new Date(r.date);
+            expect(r).toMatchObject({
+              description: expect.any(String),
+              category: 'other',
               amount: expect.any(Number),
               date: expect.any(Date),
             });
@@ -66,6 +91,7 @@ describe('ExpenseController (e2e)', () => {
             r.date = new Date(r.date);
             expect(r).toMatchObject({
               description: expect.any(String),
+              category: expect.any(String),
               amount: expect.any(Number),
               date: expect.any(Date),
             });
@@ -90,6 +116,7 @@ describe('ExpenseController (e2e)', () => {
           results.date = new Date(results.date);
           expect(results).toMatchObject({
             description: expect.any(String),
+            category: expect.any(String),
             amount: 30,
             date: expect.any(Date),
           });
@@ -112,6 +139,7 @@ describe('ExpenseController (e2e)', () => {
           results.date = new Date(results.date);
           expect(results).toMatchObject({
             description: expect.any(String),
+            category: expect.any(String),
             amount: 30,
             date: expect.any(Date),
           });
@@ -137,12 +165,12 @@ describe('ExpenseController (e2e)', () => {
       return app
         .inject({
           method: 'DELETE',
-          url: '/expense/2',
+          url: '/expense/3',
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
 
-          expect(response.payload).toEqual('Expense with id 2 does not exist');
+          expect(response.payload).toEqual('Expense with id 3 does not exist');
         });
     });
   });

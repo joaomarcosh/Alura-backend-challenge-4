@@ -85,7 +85,7 @@ describe('ExpenseController: ', () => {
   });
 
   describe('delete(): ', () => {
-    it('should return updated expense', async () => {
+    it('should return deleted expense message', async () => {
       const result = await expenseController.delete(1);
 
       expect(expenseService.delete).toHaveBeenCalledWith(1);
