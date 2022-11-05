@@ -17,6 +17,9 @@ export class Expense {
 
   @Column()
   description: string;
+  
+  @Column()
+  category: string;
 
   @Column({ type: 'real' })
   amount: number;
