@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { ExpenseCategories } from './enums/expense-categories.enum';
 
 @Entity('expense')
 @Check(`"amount" > 0`)
@@ -18,7 +19,7 @@ export class Expense {
   @Column()
   description: string;
   
-  @Column()
+  @Column({ default: ExpenseCategories.OTHER })
   category: string;
 
   @Column({ type: 'real' })
