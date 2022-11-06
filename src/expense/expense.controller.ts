@@ -9,6 +9,7 @@ import {
   Put,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Query,
 } from '@nestjs/common';
 import { ExpenseService } from './expense.service';
 import { CreateExpenseDTO } from './dtos/create-expense.dto';
@@ -21,8 +22,8 @@ export class ExpenseController {
   constructor(private expenseService: ExpenseService) {}
 
   @Get()
-  async findAll(): Promise<ReturnExpenseDTO[]> {
-    return await this.expenseService.findAll();
+  async findAll(@Query('description') description: string): Promise<ReturnExpenseDTO[]> {
+    return await this.expenseService.findAll(description);
   }
 
   @Get(':id')

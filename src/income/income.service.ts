@@ -4,6 +4,7 @@ import { IncomeRepository } from './income.repository';
 import { CreateIncomeDTO } from './dtos/create-income.dto';
 import { UpdateIncomeDTO } from './dtos/update-income.dto';
 import { ReturnIncomeDTO } from './dtos/return-income.dto';
+import { ILike } from 'typeorm';
 
 @Injectable()
 export class IncomeService {
@@ -12,7 +13,12 @@ export class IncomeService {
     private incomeRepository: IncomeRepository,
   ) {}
 
-  async findAll(): Promise<ReturnIncomeDTO[]> {
+  async findAll(description: string): Promise<ReturnIncomeDTO[]> {
+    if (description) {
+      return await this.incomeRepository.findBy({
+        description: ILike(description)
+      })
+    }
     return await this.incomeRepository.find();
   }
 

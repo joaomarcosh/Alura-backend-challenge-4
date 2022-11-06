@@ -9,6 +9,7 @@ import {
 
 const mockExpenseRepository = () => ({
   find: jest.fn(),
+  findBy: jest.fn(),
   findOneBy: jest.fn(),
   insert: jest.fn(),
   update: jest.fn(),
@@ -47,6 +48,15 @@ describe('expenseService: ', () => {
       const result = await expenseService.findAll();
 
       expect(expenseRepository.find).toHaveBeenCalled();
+      expect(result).toEqual(mockReturnedExpense);
+    });
+    
+    it('should return all expense with matching description', async () => {
+      expenseRepository.findBy.mockResolvedValue(mockReturnedExpense);
+
+      const result = await expenseService.findAll('test%20expense');
+
+      expect(expenseRepository.findBy).toHaveBeenCalled();
       expect(result).toEqual(mockReturnedExpense);
     });
   });

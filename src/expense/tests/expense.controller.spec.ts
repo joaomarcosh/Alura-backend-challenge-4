@@ -50,9 +50,9 @@ describe('ExpenseController: ', () => {
 
   describe('findAll(): ', () => {
     it('should return all expense', async () => {
-      const result = await expenseController.findAll();
+      const result = await expenseController.findAll('test');
 
-      expect(expenseService.findAll).toHaveBeenCalled();
+      expect(expenseService.findAll).toHaveBeenCalledWith('test');
       expect(result).toBe(mockReturnedExpense);
     });
   });

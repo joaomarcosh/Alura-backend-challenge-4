@@ -72,6 +72,28 @@ describe('IncomeController (e2e)', () => {
           });
         });
     });
+    
+    it('should return status 200 and all incomes with matching description', () => {
+      return app
+        .inject({
+          method: 'GET',
+          url: '/income?description=test%20income',
+        })
+        .then((response) => {
+          expect(response.statusCode).toEqual(200);
+
+          const results = JSON.parse(response.payload);
+
+          results.forEach((r) => {
+            r.date = new Date(r.date);
+            expect(r).toMatchObject({
+              description: 'test income',
+              amount: expect.any(Number),
+              date: expect.any(Date),
+            });
+          });
+        });
+    });
   });
 
   describe('/income/:id (PUT)', () => {

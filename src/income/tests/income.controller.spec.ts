@@ -50,9 +50,9 @@ describe('IncomeController: ', () => {
 
   describe('findAll(): ', () => {
     it('should return all income', async () => {
-      const result = await incomeController.findAll();
+      const result = await incomeController.findAll('test');
 
-      expect(incomeService.findAll).toHaveBeenCalled();
+      expect(incomeService.findAll).toHaveBeenCalledWith('test');
       expect(result).toBe(mockReturnedIncome);
     });
   });

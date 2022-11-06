@@ -4,6 +4,7 @@ import { ExpenseRepository } from './expense.repository';
 import { CreateExpenseDTO } from './dtos/create-expense.dto';
 import { UpdateExpenseDTO } from './dtos/update-expense.dto';
 import { ReturnExpenseDTO } from './dtos/return-expense.dto';
+import { ILike } from 'typeorm';
 
 @Injectable()
 export class ExpenseService {
@@ -12,7 +13,12 @@ export class ExpenseService {
     private expenseRepository: ExpenseRepository,
   ) {}
 
-  async findAll(): Promise<ReturnExpenseDTO[]> {
+  async findAll(description: string): Promise<ReturnExpenseDTO[]> {
+    if (description) {
+      return await this.expenseRepository.findBy({
+        description: ILike(description)
+      })
+    }
     return await this.expenseRepository.find();
   }
 

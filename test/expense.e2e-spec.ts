@@ -98,6 +98,29 @@ describe('ExpenseController (e2e)', () => {
           });
         });
     });
+    
+    it('should return status 200 and all expenses with matching description', () => {
+      return app
+        .inject({
+          method: 'GET',
+          url: '/expense?description=test%20expense',
+        })
+        .then((response) => {
+          expect(response.statusCode).toEqual(200);
+
+          const results = JSON.parse(response.payload);
+
+          results.forEach((r) => {
+            r.date = new Date(r.date);
+            expect(r).toMatchObject({
+              description: 'test expense',
+              category: expect.any(String),
+              amount: expect.any(Number),
+              date: expect.any(Date),
+            });
+          });
+        });
+    });
   });
 
   describe('/expense/:id (PUT)', () => {

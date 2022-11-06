@@ -9,6 +9,7 @@ import {
 
 const mockIncomeRepository = () => ({
   find: jest.fn(),
+  findBy: jest.fn(),
   findOneBy: jest.fn(),
   insert: jest.fn(),
   update: jest.fn(),
@@ -47,6 +48,15 @@ describe('incomeService: ', () => {
       const result = await incomeService.findAll();
 
       expect(incomeRepository.find).toHaveBeenCalled();
+      expect(result).toEqual(mockReturnedIncome);
+    });
+    
+    it('should return all income with matching description', async () => {
+      incomeRepository.findBy.mockResolvedValue(mockReturnedIncome);
+
+      const result = await incomeService.findAll('test%20income');
+
+      expect(incomeRepository.findBy).toHaveBeenCalled();
       expect(result).toEqual(mockReturnedIncome);
     });
   });
