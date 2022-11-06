@@ -4,6 +4,7 @@ import { Income } from './income/income.entity';
 import { IncomeModule } from './income/income.module';
 import { Expense } from './expense/expense.entity';
 import { ExpenseModule } from './expense/expense.module';
+import { SummaryModule } from './summary/summary.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ExpenseModule } from './expense/expense.module';
     }),
     IncomeModule,
     ExpenseModule,
+    SummaryModule,
   ],
   controllers: [],
   providers: [],

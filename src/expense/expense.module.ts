@@ -9,5 +9,6 @@ import { ExpenseRepository } from './expense.repository';
   imports: [TypeOrmModule.forFeature([Expense])],
   providers: [ExpenseService, ExpenseRepository],
   controllers: [ExpenseController],
+  exports: [ExpenseService],
 })
 export class ExpenseModule {}
