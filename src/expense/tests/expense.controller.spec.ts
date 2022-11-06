@@ -24,6 +24,7 @@ describe('ExpenseController: ', () => {
           return {
             findAll: jest.fn().mockResolvedValue(mockReturnedExpense),
             findOneById: jest.fn().mockResolvedValue(mockReturnedExpense),
+            findByMonth: jest.fn().mockResolvedValue(mockReturnedExpense),
             create: jest.fn().mockResolvedValue(mockReturnedExpense),
             update: jest.fn().mockResolvedValue(mockUpdatedExpense),
             delete: jest.fn().mockResolvedValue(`Expense with id 1 deleted`),
@@ -62,6 +63,15 @@ describe('ExpenseController: ', () => {
       const result = await expenseController.findOneById(1);
 
       expect(expenseService.findOneById).toHaveBeenCalledWith(1);
+      expect(result).toBe(mockReturnedExpense);
+    });
+  });
+  
+  describe('findByMonth(): ', () => {
+    it('should return all expense from the specified month', async () => {
+      const result = await expenseController.findByMonth(2022,10);
+
+      expect(expenseService.findByMonth).toHaveBeenCalledWith(2022,10);
       expect(result).toBe(mockReturnedExpense);
     });
   });

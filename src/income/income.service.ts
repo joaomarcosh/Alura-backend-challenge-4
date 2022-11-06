@@ -25,6 +25,10 @@ export class IncomeService {
   async findOneById(id: number): Promise<ReturnIncomeDTO> {
     return await this.incomeRepository.findOneBy({ id });
   }
+  
+  async findByMonth(year: string, month: string): Promise<ReturnIncomeDTO[]> {
+    return await this.incomeRepository.findByMonth(year, month);
+  }
 
   async create(income: CreateIncomeDTO): Promise<ReturnIncomeDTO[]> {
     const desc = income.description;

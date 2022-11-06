@@ -95,14 +95,13 @@ describe('IncomeController (e2e)', () => {
         });
     });
   });
-
-  describe('/income/:id (PUT)', () => {
-    it('should return status 200 and updated income', () => {
+  
+  describe('/income/:id (GET)', () => {
+    it('should return status 200 and selected income', () => {
       return app
         .inject({
-          method: 'PUT',
+          method: 'GET',
           url: '/income/1',
-          payload: { amount: 30 },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -112,19 +111,60 @@ describe('IncomeController (e2e)', () => {
           results.date = new Date(results.date);
           expect(results).toMatchObject({
             description: expect.any(String),
-            amount: 30,
+            amount: expect.any(Number),
             date: expect.any(Date),
           });
         });
     });
   });
-
-  describe('/income/:id (GET)', () => {
-    it('should return status 200 and selected income', () => {
+  
+  describe('/income/:year/:month (GET)', () => {
+    it('should return status 200 and all incomes from specified month', () => {
       return app
         .inject({
           method: 'GET',
+          url: '/income/2022/10',
+        })
+        .then((response) => {
+          expect(response.statusCode).toEqual(200);
+
+          const results = JSON.parse(response.payload);
+
+          results.forEach(r => {
+            r.date = new Date(r.date);
+            expect(r).toMatchObject({
+              description: expect.any(String),
+              amount: expect.any(Number),
+              date: expect.any(Date),
+            });
+          })
+        });
+    });
+    
+    it('should return status 200 and empty array', () => {
+      return app
+        .inject({
+          method: 'GET',
+          url: '/income/2022/01',
+        })
+        .then((response) => {
+          expect(response.statusCode).toEqual(200);
+
+          const results = JSON.parse(response.payload);
+
+          results.date = new Date(results.date);
+          expect(results.length).toBe(0);
+        });
+    });
+  });
+
+  describe('/income/:id (PUT)', () => {
+    it('should return status 200 and updated income', () => {
+      return app
+        .inject({
+          method: 'PUT',
           url: '/income/1',
+          payload: { amount: 30 },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);

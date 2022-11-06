@@ -11,6 +11,7 @@ const mockIncomeRepository = () => ({
   find: jest.fn(),
   findBy: jest.fn(),
   findOneBy: jest.fn(),
+  findByMonth: jest.fn(),
   insert: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
@@ -68,6 +69,17 @@ describe('incomeService: ', () => {
       const result = await incomeService.findOneById(1);
 
       expect(incomeRepository.findOneBy).toHaveBeenCalledWith({ id: 1 });
+      expect(result).toEqual(mockReturnedIncome);
+    });
+  });
+  
+  describe('findByMonth(): ', () => {
+    it('should return all income from the specified month', async () => {
+      incomeRepository.findByMonth.mockResolvedValue(mockReturnedIncome);
+
+      const result = await incomeService.findByMonth(2022,10);
+
+      expect(incomeRepository.findByMonth).toHaveBeenCalledWith(2022,10);
       expect(result).toEqual(mockReturnedIncome);
     });
   });

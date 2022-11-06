@@ -32,6 +32,11 @@ export class ExpenseController {
   ): Promise<ReturnExpenseDTO> {
     return await this.expenseService.findOneById(id);
   }
+  
+  @Get(':year/:month')
+  async findByMonth(@Param('year') year: string, @Param('month') month: string): Promise<ReturnExpenseDTO[]> {
+    return await this.expenseService.findByMonth(year,month);
+  }
 
   @Post()
   async create(@Body() expense: CreateExpenseDTO): Promise<ReturnExpenseDTO[]> {

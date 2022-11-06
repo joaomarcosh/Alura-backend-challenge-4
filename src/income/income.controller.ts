@@ -32,6 +32,11 @@ export class IncomeController {
   ): Promise<ReturnIncomeDTO> {
     return await this.incomeService.findOneById(id);
   }
+  
+  @Get(':year/:month')
+  async findByMonth(@Param('year') year: string, @Param('month') month: string): Promise<ReturnIncomeDTO[]> {
+    return await this.incomeService.findByMonth(year,month);
+  }
 
   @Post()
   async create(@Body() income: CreateIncomeDTO): Promise<ReturnIncomeDTO[]> {

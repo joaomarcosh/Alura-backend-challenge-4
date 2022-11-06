@@ -25,6 +25,10 @@ export class ExpenseService {
   async findOneById(id: number): Promise<ReturnExpenseDTO> {
     return await this.expenseRepository.findOneBy({ id });
   }
+  
+  async findByMonth(year: string, month: string): Promise<ReturnExpenseDTO[]> {
+    return await this.expenseRepository.findByMonth(year, month);
+  }
 
   async create(expense: CreateExpenseDTO): Promise<ReturnExpenseDTO[]> {
     const desc = expense.description;

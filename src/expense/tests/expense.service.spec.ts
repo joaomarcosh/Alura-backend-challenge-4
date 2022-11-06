@@ -11,6 +11,7 @@ const mockExpenseRepository = () => ({
   find: jest.fn(),
   findBy: jest.fn(),
   findOneBy: jest.fn(),
+  findByMonth: jest.fn(),
   insert: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
@@ -68,6 +69,17 @@ describe('expenseService: ', () => {
       const result = await expenseService.findOneById(1);
 
       expect(expenseRepository.findOneBy).toHaveBeenCalledWith({ id: 1 });
+      expect(result).toEqual(mockReturnedExpense);
+    });
+  });
+  
+  describe('findByMonth(): ', () => {
+    it('should return all expense from the specified month', async () => {
+      expenseRepository.findByMonth.mockResolvedValue(mockReturnedExpense);
+
+      const result = await expenseService.findByMonth(2022,10);
+
+      expect(expenseRepository.findByMonth).toHaveBeenCalledWith(2022,10);
       expect(result).toEqual(mockReturnedExpense);
     });
   });

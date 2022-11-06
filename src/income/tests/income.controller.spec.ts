@@ -24,6 +24,7 @@ describe('IncomeController: ', () => {
           return {
             findAll: jest.fn().mockResolvedValue(mockReturnedIncome),
             findOneById: jest.fn().mockResolvedValue(mockReturnedIncome),
+            findByMonth: jest.fn().mockResolvedValue(mockReturnedIncome),
             create: jest.fn().mockResolvedValue(mockReturnedIncome),
             update: jest.fn().mockResolvedValue(mockUpdatedIncome),
             delete: jest.fn().mockResolvedValue(`Income with id 1 deleted`),
@@ -62,6 +63,15 @@ describe('IncomeController: ', () => {
       const result = await incomeController.findOneById(1);
 
       expect(incomeService.findOneById).toHaveBeenCalledWith(1);
+      expect(result).toBe(mockReturnedIncome);
+    });
+  });
+  
+  describe('findByMonth(): ', () => {
+    it('should return all income from the specified month', async () => {
+      const result = await incomeController.findByMonth(2022,10);
+
+      expect(incomeService.findByMonth).toHaveBeenCalledWith(2022,10);
       expect(result).toBe(mockReturnedIncome);
     });
   });
