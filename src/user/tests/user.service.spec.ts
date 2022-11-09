@@ -10,7 +10,7 @@ import {
 const mockUserRepository = () => ({
   find: jest.fn(),
   findOneBy: jest.fn(),
-  insert: jest.fn(),
+  createUser: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
 });
@@ -63,12 +63,12 @@ describe('userService: ', () => {
 
   describe('create(): ', () => {
     it('should return created user', async () => {
-      userRepository.insert.mockResolvedValue({ identifiers: [{ id: 1 }] });
+      userRepository.createUser.mockResolvedValue({ identifiers: [{ id: 1 }] });
       userRepository.find.mockResolvedValue(mockReturnedUser);
 
       const result = await userService.create(mockUser);
 
-      expect(userRepository.insert).toHaveBeenCalledWith(mockUser);
+      expect(userRepository.createUser).toHaveBeenCalledWith(mockUser);
       expect(userRepository.find).toHaveBeenCalledWith({
         where: [{ id: 1 }],
       });

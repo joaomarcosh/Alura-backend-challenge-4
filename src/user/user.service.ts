@@ -21,7 +21,7 @@ export class UserService {
   }
   
   async create(user: CreateUserDTO): Promise<User[]> {
-    const insertResult = await this.userRepository.insert(user);
+    const insertResult = await this.userRepository.createUser(user);
     const createdUser = await this.userRepository.find({
       where: [...insertResult.identifiers],
     });

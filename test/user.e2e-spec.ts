@@ -41,9 +41,24 @@ describe('UserController (e2e)', () => {
           results.forEach((r) => {
             expect(r).toMatchObject({
               username: expect.any(String),
-              password: expect.any(String),
             });
           });
+        });
+    });
+    
+    it('should return status 409 and error message', () => {
+      return app
+        .inject({
+          method: 'POST',
+          url: '/user',
+          payload: mockUser,
+        })
+        .then((response) => {
+          expect(response.statusCode).toEqual(409);
+
+          const results = JSON.parse(response.payload);
+
+          expect(results.message).toEqual('Username already exists');
         });
     });
   });
@@ -63,7 +78,6 @@ describe('UserController (e2e)', () => {
           results.forEach((r) => {
             expect(r).toMatchObject({
               username: expect.any(String),
-              password: expect.any(String),
             });
           });
         });
@@ -84,7 +98,6 @@ describe('UserController (e2e)', () => {
 
           expect(results).toMatchObject({
             username: expect.any(String),
-            password: expect.any(String),
           });
         });
     });
@@ -105,7 +118,6 @@ describe('UserController (e2e)', () => {
 
           expect(results).toMatchObject({
             username: expect.any(String),
-            password: 'abcdefgh',
           });
         });
     });
