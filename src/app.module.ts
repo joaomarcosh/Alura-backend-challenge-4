@@ -6,6 +6,7 @@ import { Expense } from './expense/expense.entity';
 import { ExpenseModule } from './expense/expense.module';
 import { SummaryModule } from './summary/summary.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UserModule } from './user/user.module';
     ExpenseModule,
     SummaryModule,
     UserModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
