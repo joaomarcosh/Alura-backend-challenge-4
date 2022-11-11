@@ -10,13 +10,16 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ExpenseService } from './expense.service';
 import { CreateExpenseDTO } from './dtos/create-expense.dto';
 import { UpdateExpenseDTO } from './dtos/update-expense.dto';
 import { ReturnExpenseDTO } from './dtos/return-expense.dto';
+import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 
 @UseInterceptors(ClassSerializerInterceptor)
+@UseGuards(JwtAuthGuard)
 @Controller('expense')
 export class ExpenseController {
   constructor(private expenseService: ExpenseService) {}

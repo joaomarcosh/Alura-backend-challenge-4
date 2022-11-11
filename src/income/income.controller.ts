@@ -10,13 +10,16 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { IncomeService } from './income.service';
 import { CreateIncomeDTO } from './dtos/create-income.dto';
 import { UpdateIncomeDTO } from './dtos/update-income.dto';
 import { ReturnIncomeDTO } from './dtos/return-income.dto';
+import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 
 @UseInterceptors(ClassSerializerInterceptor)
+@UseGuards(JwtAuthGuard)
 @Controller('income')
 export class IncomeController {
   constructor(private incomeService: IncomeService) {}
