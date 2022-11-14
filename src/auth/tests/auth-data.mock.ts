@@ -17,3 +17,7 @@ export const mockAccessToken = {
   access_token: 'test token',
 };
 
+export const mockResponse = {
+  setCookie: jest.fn(),
+}
+

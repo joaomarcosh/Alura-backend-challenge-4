@@ -6,6 +6,7 @@ import {
   mockUser,
   mockRequest,
   mockAccessToken,
+  mockResponse,
 } from './auth-data.mock';
 
 const moduleMocker = new ModuleMocker(global);
@@ -45,11 +46,10 @@ describe('AuthController: ', () => {
   });
 
   describe('login(): ', () => {
-    it('should return object with access_token', async () => {
-      const result = await authController.login(mockRequest);
+    it('should call login with user', async () => {
+      await authController.login(mockRequest,mockResponse);
 
       expect(authService.login).toHaveBeenCalledWith(mockUser);
-      expect(result).toBe(mockAccessToken);
     });
   });
 });
