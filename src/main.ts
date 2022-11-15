@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
+
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -16,6 +19,9 @@ async function bootstrap() {
     secret: 'my-secret',
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
-  await app.listen(3000);
+  
+  const port = process.env.PORT || 3000;
+  
+  await app.listen(port);
 }
 bootstrap();

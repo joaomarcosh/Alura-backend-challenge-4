@@ -7,20 +7,16 @@ import { ExpenseModule } from './expense/expense.module';
 import { SummaryModule } from './summary/summary.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import dbConfig from './config/database.config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 4321,
-      username: 'pguser',
-      password: 'pgpassword',
-      database: 'alura',
-      entities: [Income, Expense],
-      dropSchema: true,
-      synchronize: true,
-      autoLoadEntities: true,
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        ...dbConfig[process.env.NODE_ENV],
+        entities: [Income, Expense],
+        autoLoadEntities: true,
+      }),
     }),
     IncomeModule,
     ExpenseModule,
