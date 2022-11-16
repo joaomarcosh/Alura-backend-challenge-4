@@ -9,13 +9,20 @@ import {
   Post,
   Put,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
+import { RoleGuard } from '../auth/role/role.guard';
+import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
+import { Role } from '../auth/role/role.decorator';
+import { Roles } from './enums/user-roles.enum';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { UpdateUserDTO } from './dtos/update-user.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
+@Role(Roles.Admin)
+@UseGuards(JwtAuthGuard,RoleGuard)
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}

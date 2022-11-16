@@ -3,7 +3,9 @@ import {
   IsString,
   IsNotEmpty,
   Length,
+  IsEnum,
 } from 'class-validator';
+import { Roles } from '../enums/user-roles.enum';
 
 export class UpdateUserDTO {
   @IsOptional()
@@ -11,6 +13,10 @@ export class UpdateUserDTO {
   @IsNotEmpty()
   @Length(4, 32)
   username: string;
+  
+  @IsOptional()
+  @IsEnum(Roles, { message: 'Role must be user or admin'})
+  role: Roles;
 
   @IsOptional()
   @IsString()

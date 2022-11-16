@@ -6,6 +6,8 @@ import {
 import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { mockUser } from '../src/user/tests/user-data.mock';
+import { JwtAuthGuard } from '../src/auth/jwt/jwt-auth.guard';
+import { RoleGuard } from '../src/auth/role/role.guard';
 
 describe('UserController (e2e)', () => {
   let app: NestFastifyApplication;
@@ -13,7 +15,12 @@ describe('UserController (e2e)', () => {
   beforeAll(async () => {  
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+    .overrideGuard(JwtAuthGuard)
+    .useValue({})
+    .overrideGuard(RoleGuard)
+    .useValue({})
+    .compile();
 
     app = moduleRef.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),

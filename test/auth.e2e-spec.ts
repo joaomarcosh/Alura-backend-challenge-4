@@ -8,9 +8,10 @@ import { ValidationPipe } from '@nestjs/common';
 import fastifyCookie from '@fastify/cookie';
 import { Connection } from 'typeorm';
 import { User } from '../src/user/user.entity';
+import { Roles } from '../src/user/enums/user-roles.enum';
 import { mockIncome } from '../src/income/tests/income-data.mock';
 
-describe('AuthController (e2e)', () => {
+describe('AuthController and general auth stuff (e2e)', () => {
   let app: NestFastifyApplication;
   let token;
 
@@ -40,7 +41,7 @@ describe('AuthController (e2e)', () => {
         .inject({
           method: 'POST',
           url: '/auth/signup',
-          payload: { username: "test", password: "12345678", passwordConfirmation: "12345678" },
+          payload: { username: "test", role: Roles.User, password: "12345678", passwordConfirmation: "12345678" },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(201);
@@ -70,9 +71,89 @@ describe('AuthController (e2e)', () => {
         })
         .then((response) => {
           token = response.cookies[0]['value'];
-          
           expect(response.statusCode).toEqual(204);
           expect(token).toEqual(expect.any(String));
+        })
+    });
+    
+    it('should return status 401', () => {
+      return app
+        .inject({
+          method: 'POST',
+          url: '/auth/login',
+          payload: { username: "noSuchUser", password: "12345678" },
+        })
+        .then((response) => {
+          expect(response.statusCode).toEqual(401);
+        })
+    });
+  });
+  
+  describe('/income (GET)', () => {
+    it('should return status 200 if using Auth cookie', () => {
+      return app
+        .inject({
+          method: 'GET',
+          url: '/income',
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          expect(response.statusCode).toEqual(200);
+        })
+    });
+    
+    it('should return status 401 if not authorized', () => {
+      return app
+        .inject({
+          method: 'GET',
+          url: '/income',
+        })
+        .then((response) => {
+          expect(response.statusCode).toEqual(401);
+        })
+    });
+  });
+  
+  describe('/user (GET)', () => {
+    it('should return status 200 if using Auth cookie and proper role', async () => {
+      let adminToken;
+      
+      await app
+        .inject({
+          method: 'POST',
+          url: '/auth/signup',
+          payload: { username: "admin", role: Roles.Admin, password: "12345678", passwordConfirmation: "12345678" },
+        })
+      
+      await app
+        .inject({
+          method: 'POST',
+          url: '/auth/login',
+          payload: { username: "admin", password: "12345678" },
+        }).then((response) => {
+          adminToken = response.cookies[0]['value'];
+        });
+        
+      return app
+        .inject({
+          method: 'GET',
+          url: '/user',
+          headers: { Authorization: `Bearer ${adminToken}` },
+        })
+        .then((response) => {
+          expect(response.statusCode).toEqual(200);
+        })
+    });
+    
+    it('should return status 403 if not admin role', async () => { 
+      return app
+        .inject({
+          method: 'GET',
+          url: '/user',
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          expect(response.statusCode).toEqual(403);
         })
     });
   });
