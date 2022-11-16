@@ -2,6 +2,7 @@ import {
   IsString,
   IsNotEmpty,
   Length,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateUserDTO {
@@ -14,4 +15,7 @@ export class CreateUserDTO {
   @IsNotEmpty()
   @Length(8, 32)
   password: string;
+  
+  @IsOptional()
+  passwordConfirmation: string;
 }

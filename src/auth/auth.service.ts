@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { UserRepository } from '../user/user.repository';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDTO } from '../user/dtos/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -24,5 +25,13 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+  
+  async signUp(user: CreateUserDTO) {
+    if (user.password != user.passwordConfirmation) {
+      throw new UnprocessableEntityException('Passwords do not match');
+    } else {
+      await this.userRepository.createUser(user);
+    }
   }
 }

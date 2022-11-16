@@ -8,16 +8,12 @@ import {
   mockUser,
   mockAccessToken,
   mockUserNoPassword,
+  mockUserWithConfirmation,
 } from './auth-data.mock';
-
-/*jest.mock('bcryptjs', () => {
-  return {
-    compareSync: jest.fn();
-  }
-});*/
 
 const mockUserRepository = () => ({
   findOneBy: jest.fn(),
+  createUser: jest.fn(),
 });
 
 const mockJwtService = () => ({
@@ -85,6 +81,18 @@ describe('authService: ', () => {
       
       expect(jwtService.sign).toHaveBeenCalledWith({username:'test',sub:1});
       expect(result).toEqual(mockAccessToken);
+    });
+  });
+  
+  describe('signUp(): ', () => {
+    it('should call userRepository.createUser with user', async () => {  
+      const result = await authService.signUp(mockUserWithConfirmation);
+      
+      expect(userRepository.createUser).toHaveBeenCalledWith(mockUserWithConfirmation);
+    });
+    
+    it('should throw UnprocessableEntityException', async () => {  
+      await expect(authService.signUp(mockUser)).rejects.toThrow();
     });
   });
 });

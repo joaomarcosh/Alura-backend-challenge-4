@@ -24,6 +24,7 @@ describe('AuthController: ', () => {
         if (token == AuthService) {
           return {
             login: jest.fn().mockResolvedValue(mockAccessToken),
+            signUp: jest.fn(),
           };
         }
         if (typeof token === 'function') {
@@ -50,6 +51,14 @@ describe('AuthController: ', () => {
       await authController.login(mockRequest,mockResponse);
 
       expect(authService.login).toHaveBeenCalledWith(mockUser);
+    });
+  });
+  
+  describe('signUp(): ', () => {
+    it('should call signUp with user', async () => {
+      await authController.signUp(mockUser);
+
+      expect(authService.signUp).toHaveBeenCalledWith(mockUser);
     });
   });
 });

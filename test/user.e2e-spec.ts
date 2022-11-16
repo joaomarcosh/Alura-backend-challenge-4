@@ -24,6 +24,10 @@ describe('UserController (e2e)', () => {
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
   });
+  
+  afterAll(async () => {
+    await app.close();
+  });
 
   describe('/user (POST)', () => {
     it('should return status 201 and created user', () => {
@@ -149,9 +153,5 @@ describe('UserController (e2e)', () => {
           expect(response.payload).toEqual('User with id 2 does not exist');
         });
     });
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });

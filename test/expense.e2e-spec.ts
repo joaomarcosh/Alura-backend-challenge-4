@@ -9,15 +9,18 @@ import fastifyCookie from '@fastify/cookie';
 import { Connection } from 'typeorm';
 import { User } from '../src/user/user.entity';
 import { mockExpense, mockExpenseWithoutCategory } from '../src/expense/tests/expense-data.mock';
+import { JwtAuthGuard } from '../src/auth/jwt/jwt-auth.guard';
 
 describe('ExpenseController (e2e)', () => {
   let app: NestFastifyApplication;
-  let token;
 
   beforeAll(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+    .overrideGuard(JwtAuthGuard)
+    .useValue({})
+    .compile();
 
     app = moduleRef.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),
@@ -32,31 +35,8 @@ describe('ExpenseController (e2e)', () => {
     await app.getHttpAdapter().getInstance().ready();
   });
   
-  it('should create an user and log in', async () => {
-    const connection = await app.get(Connection);
-    await connection
-      .createQueryBuilder()
-      .insert()
-      .into(User)
-      .values([
-          {
-            username: "test",
-            password: "$2a$10$Cd6wOBuD7v4uZy8PqtVT5uuJJi/Qz9hn/3k516zlKuHQEVkuDgNIC",
-            salt: "$2a$10$Cd6wOBuD7v4uZy8PqtVT5u"
-          }
-      ])
-      .execute()
-      
-    return app
-        .inject({
-          method: 'POST',
-          url: '/auth/login',
-          payload: { username: "test", password: "12345678" },
-        })
-        .then((response) => {
-          token = response.cookies[0]['value'];
-          expect(response.statusCode).toEqual(204);
-        })
+  afterAll(async () => {
+    await app.close();
   });
 
   describe('/expense (POST)', () => {
@@ -65,7 +45,6 @@ describe('ExpenseController (e2e)', () => {
         .inject({
           method: 'POST',
           url: '/expense',
-          headers: { Authorization: `Bearer ${token}` },
           payload: mockExpense,
         })
         .then((response) => {
@@ -90,7 +69,6 @@ describe('ExpenseController (e2e)', () => {
         .inject({
           method: 'POST',
           url: '/expense',
-          headers: { Authorization: `Bearer ${token}` },
           payload: mockExpenseWithoutCategory,
         })
         .then((response) => {
@@ -117,7 +95,6 @@ describe('ExpenseController (e2e)', () => {
         .inject({
           method: 'GET',
           url: '/expense',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -141,7 +118,6 @@ describe('ExpenseController (e2e)', () => {
         .inject({
           method: 'GET',
           url: '/expense?description=test%20expense',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -167,7 +143,6 @@ describe('ExpenseController (e2e)', () => {
         .inject({
           method: 'GET',
           url: '/expense/1',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -191,7 +166,6 @@ describe('ExpenseController (e2e)', () => {
         .inject({
           method: 'GET',
           url: '/expense/2022/10',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -215,7 +189,6 @@ describe('ExpenseController (e2e)', () => {
         .inject({
           method: 'GET',
           url: '/expense/2022/01',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -234,7 +207,6 @@ describe('ExpenseController (e2e)', () => {
         .inject({
           method: 'PUT',
           url: '/expense/1',
-          headers: { Authorization: `Bearer ${token}` },
           payload: { amount: 30 },
         })
         .then((response) => {
@@ -259,7 +231,6 @@ describe('ExpenseController (e2e)', () => {
         .inject({
           method: 'DELETE',
           url: '/expense/1',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -273,7 +244,6 @@ describe('ExpenseController (e2e)', () => {
         .inject({
           method: 'DELETE',
           url: '/expense/3',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -281,9 +251,5 @@ describe('ExpenseController (e2e)', () => {
           expect(response.payload).toEqual('Expense with id 3 does not exist');
         });
     });
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });

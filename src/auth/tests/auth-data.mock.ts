@@ -4,6 +4,13 @@ export const mockUser = {
   password: 'pass',
 };
 
+export const mockUserWithConfirmation = {
+  id: 1,
+  username: 'test',
+  password: 'pass',
+  passwordConfirmation: 'pass',
+};
+
 export const mockUserNoPassword = {
   id: 1,
   username: 'test',

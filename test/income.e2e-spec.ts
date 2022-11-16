@@ -9,15 +9,18 @@ import fastifyCookie from '@fastify/cookie';
 import { Connection } from 'typeorm';
 import { User } from '../src/user/user.entity';
 import { mockIncome } from '../src/income/tests/income-data.mock';
+import { JwtAuthGuard } from '../src/auth/jwt/jwt-auth.guard';
 
 describe('IncomeController (e2e)', () => {
   let app: NestFastifyApplication;
-  let token;
 
   beforeAll(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+    .overrideGuard(JwtAuthGuard)
+    .useValue({})
+    .compile();
 
     app = moduleRef.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),
@@ -25,38 +28,13 @@ describe('IncomeController (e2e)', () => {
     app.useGlobalPipes(
       new ValidationPipe({ whitelist: true, transform: true }),
     );
-    await app.register(fastifyCookie, {
-      secret: 'my-secret',
-    });
+    await app.register(fastifyCookie);
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
   });
   
-  it('should create an user and log in', async () => {
-    const connection = await app.get(Connection);
-    await connection
-      .createQueryBuilder()
-      .insert()
-      .into(User)
-      .values([
-          {
-            username: "test",
-            password: "$2a$10$Cd6wOBuD7v4uZy8PqtVT5uuJJi/Qz9hn/3k516zlKuHQEVkuDgNIC",
-            salt: "$2a$10$Cd6wOBuD7v4uZy8PqtVT5u"
-          }
-      ])
-      .execute()
-      
-    return app
-        .inject({
-          method: 'POST',
-          url: '/auth/login',
-          payload: { username: "test", password: "12345678" },
-        })
-        .then((response) => {
-          token = response.cookies[0]['value'];
-          expect(response.statusCode).toEqual(204);
-        })
+  afterAll(async () => {
+    await app.close();
   });
 
   describe('/income (POST)', () => {
@@ -65,7 +43,6 @@ describe('IncomeController (e2e)', () => {
         .inject({
           method: 'POST',
           url: '/income',
-          headers: { Authorization: `Bearer ${token}` },
           payload: mockIncome,
         })
         .then((response) => {
@@ -91,7 +68,6 @@ describe('IncomeController (e2e)', () => {
         .inject({
           method: 'GET',
           url: '/income',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -114,7 +90,6 @@ describe('IncomeController (e2e)', () => {
         .inject({
           method: 'GET',
           url: '/income?description=test%20income',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -139,7 +114,6 @@ describe('IncomeController (e2e)', () => {
         .inject({
           method: 'GET',
           url: '/income/1',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -162,7 +136,6 @@ describe('IncomeController (e2e)', () => {
         .inject({
           method: 'GET',
           url: '/income/2022/10',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -185,7 +158,6 @@ describe('IncomeController (e2e)', () => {
         .inject({
           method: 'GET',
           url: '/income/2022/01',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -204,7 +176,6 @@ describe('IncomeController (e2e)', () => {
         .inject({
           method: 'PUT',
           url: '/income/1',
-          headers: { Authorization: `Bearer ${token}` },
           payload: { amount: 30 },
         })
         .then((response) => {
@@ -228,7 +199,6 @@ describe('IncomeController (e2e)', () => {
         .inject({
           method: 'DELETE',
           url: '/income/1',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -242,7 +212,6 @@ describe('IncomeController (e2e)', () => {
         .inject({
           method: 'DELETE',
           url: '/income/2',
-          headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
           expect(response.statusCode).toEqual(200);
@@ -250,9 +219,5 @@ describe('IncomeController (e2e)', () => {
           expect(response.payload).toEqual('Income with id 2 does not exist');
         });
     });
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });
