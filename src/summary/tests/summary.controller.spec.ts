@@ -40,9 +40,9 @@ describe('SummaryController: ', () => {
   
   describe('getSummary(): ', () => {
     it('should return summary of specified month', async () => {
-      const result = await summaryController.getSummary('2022','10');
+      const result = await summaryController.getSummary(1,'2022','10');
 
-      expect(summaryService.getSummary).toHaveBeenCalledWith('2022','10');
+      expect(summaryService.getSummary).toHaveBeenCalledWith(1,'2022','10');
       expect(result).toBe(mockSummary);
     });
   });

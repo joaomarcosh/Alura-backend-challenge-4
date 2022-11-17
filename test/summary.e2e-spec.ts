@@ -14,6 +14,7 @@ import { mockIncome } from '../src/income/tests/income-data.mock';
 import { mockExpense } from '../src/expense/tests/expense-data.mock';
 import { mockSummary } from '../src/summary/tests/summary-data.mock';
 import { JwtAuthGuard } from '../src/auth/jwt/jwt-auth.guard';
+import { MockJwtGuard } from './mocks/mock-jwt.guard';
 
 describe('SummaryController (e2e)', () => {
   let app: NestFastifyApplication;
@@ -23,7 +24,7 @@ describe('SummaryController (e2e)', () => {
       imports: [AppModule],
     })
     .overrideGuard(JwtAuthGuard)
-    .useValue({})
+    .useClass(MockJwtGuard)
     .compile();
 
     app = moduleRef.createNestApplication<NestFastifyApplication>(
@@ -32,9 +33,7 @@ describe('SummaryController (e2e)', () => {
     app.useGlobalPipes(
       new ValidationPipe({ whitelist: true, transform: true }),
     );
-    await app.register(fastifyCookie, {
-      secret: 'my-secret',
-    });
+    await app.register(fastifyCookie);
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
     
@@ -47,7 +46,7 @@ describe('SummaryController (e2e)', () => {
     await connection.createQueryBuilder()
       .insert()
       .into(Income)
-      .values(mockIncome)
+      .values({...mockIncome,userId:1})
       .execute()
   });
   

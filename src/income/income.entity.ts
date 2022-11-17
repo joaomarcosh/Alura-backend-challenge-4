@@ -14,6 +14,10 @@ export class Income {
   @Exclude()
   @PrimaryGeneratedColumn()
   id: number;
+  
+  @Exclude()
+  @Column()
+  userId: number;
 
   @Column()
   description: string;

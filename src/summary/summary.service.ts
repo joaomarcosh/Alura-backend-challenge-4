@@ -10,11 +10,11 @@ export class SummaryService {
     private incomeService: IncomeService,
   ) {}
   
-  async getSummary(year: string, month: string) {
+  async getSummary(userId: number, year: string, month: string) {
     const monthlyExpenses = await this.expenseService.findByMonth(year, month);
     const totalExpenseAmount = monthlyExpenses.reduce((total,expense) => total + expense.amount, 0);
     
-    const monthlyIncomes = await this.incomeService.findByMonth(year, month);
+    const monthlyIncomes = await this.incomeService.findByMonth(userId, year, month);
     const totalIncomeAmount = monthlyIncomes.reduce((total,income) => total + income.amount, 0);
     
     const finalBalance = totalIncomeAmount - totalExpenseAmount;

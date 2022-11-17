@@ -49,10 +49,10 @@ describe('summaryService: ', () => {
       expenseService.findByMonth.mockResolvedValue([mockExpense]);
       incomeService.findByMonth.mockResolvedValue([mockIncome]);
 
-      const result = await summaryService.getSummary(2022,10);
+      const result = await summaryService.getSummary(1,2022,10);
 
       expect(expenseService.findByMonth).toHaveBeenCalledWith(2022,10);
-      expect(incomeService.findByMonth).toHaveBeenCalledWith(2022,10);
+      expect(incomeService.findByMonth).toHaveBeenCalledWith(1,2022,10);
       expect(result).toMatchObject(mockSummary);
     });
   });

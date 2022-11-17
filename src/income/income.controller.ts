@@ -11,7 +11,9 @@ import {
   ClassSerializerInterceptor,
   Query,
   UseGuards,
+  Request,
 } from '@nestjs/common';
+import { UserId } from '../utils/decorators/user-id.decorator';
 import { IncomeService } from './income.service';
 import { CreateIncomeDTO } from './dtos/create-income.dto';
 import { UpdateIncomeDTO } from './dtos/update-income.dto';
@@ -25,37 +27,39 @@ export class IncomeController {
   constructor(private incomeService: IncomeService) {}
 
   @Get()
-  async findAll(@Query('description') description: string): Promise<ReturnIncomeDTO[]> {
-    return await this.incomeService.findAll(description);
+  async findAll(@UserId() userId: number, @Query('description') description: string): Promise<ReturnIncomeDTO[]> {
+    return await this.incomeService.findAll(userId, description);
   }
 
   @Get(':id')
   async findOneById(
+    @UserId() userId: number,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ReturnIncomeDTO> {
-    return await this.incomeService.findOneById(id);
+    return await this.incomeService.findOneById(userId, id);
   }
   
   @Get(':year/:month')
-  async findByMonth(@Param('year') year: string, @Param('month') month: string): Promise<ReturnIncomeDTO[]> {
-    return await this.incomeService.findByMonth(year,month);
+  async findByMonth(@UserId() userId: number, @Param('year') year: string, @Param('month') month: string): Promise<ReturnIncomeDTO[]> {
+    return await this.incomeService.findByMonth(userId,year,month);
   }
 
   @Post()
-  async create(@Body() income: CreateIncomeDTO): Promise<ReturnIncomeDTO[]> {
-    return await this.incomeService.create(income);
+  async create(@UserId() userId: number, @Body() income: CreateIncomeDTO): Promise<ReturnIncomeDTO[]> {
+    return await this.incomeService.create(userId, income);
   }
 
   @Put(':id')
   async update(
+    @UserId() userId: number,
     @Param('id', ParseIntPipe) id: number,
     @Body() income: UpdateIncomeDTO,
   ): Promise<ReturnIncomeDTO> {
-    return await this.incomeService.update(id, income);
+    return await this.incomeService.update(userId, id, income);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<string> {
-    return await this.incomeService.delete(id);
+  async delete(@UserId() userId: number, @Param('id', ParseIntPipe) id: number): Promise<string> {
+    return await this.incomeService.delete(userId, id);
   }
 }

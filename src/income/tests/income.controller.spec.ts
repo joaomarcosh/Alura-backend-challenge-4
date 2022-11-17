@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
+import { UserId } from '../../utils/decorators/user-id.decorator';
 import { IncomeController } from '../income.controller';
 import { IncomeService } from '../income.service';
 import {
@@ -51,54 +52,54 @@ describe('IncomeController: ', () => {
 
   describe('findAll(): ', () => {
     it('should return all income', async () => {
-      const result = await incomeController.findAll('test');
+      const result = await incomeController.findAll(1,'test');
 
-      expect(incomeService.findAll).toHaveBeenCalledWith('test');
+      expect(incomeService.findAll).toHaveBeenCalledWith(1,'test');
       expect(result).toBe(mockReturnedIncome);
     });
   });
 
   describe('findOneById(): ', () => {
     it('should return one income', async () => {
-      const result = await incomeController.findOneById(1);
+      const result = await incomeController.findOneById(1, 1);
 
-      expect(incomeService.findOneById).toHaveBeenCalledWith(1);
+      expect(incomeService.findOneById).toHaveBeenCalledWith(1, 1);
       expect(result).toBe(mockReturnedIncome);
     });
   });
   
   describe('findByMonth(): ', () => {
     it('should return all income from the specified month', async () => {
-      const result = await incomeController.findByMonth(2022,10);
+      const result = await incomeController.findByMonth(1,2022,10);
 
-      expect(incomeService.findByMonth).toHaveBeenCalledWith(2022,10);
+      expect(incomeService.findByMonth).toHaveBeenCalledWith(1,2022,10);
       expect(result).toBe(mockReturnedIncome);
     });
   });
 
   describe('create(): ', () => {
     it('should return created income', async () => {
-      const result = await incomeController.create(mockIncome);
+      const result = await incomeController.create(1, mockIncome);
 
-      expect(incomeService.create).toHaveBeenCalledWith(mockIncome);
+      expect(incomeService.create).toHaveBeenCalledWith(1, mockIncome);
       expect(result).toBe(mockReturnedIncome);
     });
   });
 
   describe('update(): ', () => {
     it('should return updated income', async () => {
-      const result = await incomeController.update(1, { amount: 30 });
+      const result = await incomeController.update(1, 1, { amount: 30 });
 
-      expect(incomeService.update).toHaveBeenCalledWith(1, { amount: 30 });
+      expect(incomeService.update).toHaveBeenCalledWith(1, 1, { amount: 30 });
       expect(result).toBe(mockUpdatedIncome);
     });
   });
 
   describe('delete(): ', () => {
     it('should return updated income', async () => {
-      const result = await incomeController.delete(1);
+      const result = await incomeController.delete(1, 1);
 
-      expect(incomeService.delete).toHaveBeenCalledWith(1);
+      expect(incomeService.delete).toHaveBeenCalledWith(1, 1);
       expect(result).toBe(`Income with id 1 deleted`);
     });
   });
