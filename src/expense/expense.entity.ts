@@ -5,9 +5,12 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { ExpenseCategories } from './enums/expense-categories.enum';
+import { User } from '../user/user.entity';
 
 @Entity('expense')
 @Check(`"amount" > 0`)
@@ -17,7 +20,8 @@ export class Expense {
   id: number;
   
   @Exclude()
-  @Column()
+  @OneToOne(() => User, { onDelete: "CASCADE"})
+  @JoinColumn()
   userId: number;
 
   @Column()
