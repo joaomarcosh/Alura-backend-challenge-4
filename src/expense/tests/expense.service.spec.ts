@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExpenseService } from '../expense.service';
 import { ExpenseRepository } from '../expense.repository';
+import { ILike } from 'typeorm';
 import {
   mockExpense,
   mockReturnedExpense,
@@ -44,20 +45,23 @@ describe('expenseService: ', () => {
 
   describe('findAll(): ', () => {
     it('should return all expense', async () => {
-      expenseRepository.find.mockResolvedValue(mockReturnedExpense);
+      expenseRepository.findBy.mockResolvedValue(mockReturnedExpense);
 
-      const result = await expenseService.findAll();
+      const result = await expenseService.findAll(1);
 
-      expect(expenseRepository.find).toHaveBeenCalled();
+      expect(expenseRepository.findBy).toHaveBeenCalledWith({ userId: 1 });
       expect(result).toEqual(mockReturnedExpense);
     });
     
     it('should return all expense with matching description', async () => {
       expenseRepository.findBy.mockResolvedValue(mockReturnedExpense);
 
-      const result = await expenseService.findAll('test%20expense');
+      const result = await expenseService.findAll(1, 'test%20expense');
 
-      expect(expenseRepository.findBy).toHaveBeenCalled();
+      expect(expenseRepository.findBy).toHaveBeenCalledWith({
+        userId: 1, 
+        description: ILike('test%20expense'),
+      });
       expect(result).toEqual(mockReturnedExpense);
     });
   });
@@ -66,9 +70,12 @@ describe('expenseService: ', () => {
     it('should return one expense', async () => {
       expenseRepository.findOneBy.mockResolvedValue(mockReturnedExpense);
 
-      const result = await expenseService.findOneById(1);
+      const result = await expenseService.findOneById(1,1);
 
-      expect(expenseRepository.findOneBy).toHaveBeenCalledWith({ id: 1 });
+      expect(expenseRepository.findOneBy).toHaveBeenCalledWith({
+        id: 1,
+        userId: 1,
+      });
       expect(result).toEqual(mockReturnedExpense);
     });
   });
@@ -77,9 +84,9 @@ describe('expenseService: ', () => {
     it('should return all expense from the specified month', async () => {
       expenseRepository.findByMonth.mockResolvedValue(mockReturnedExpense);
 
-      const result = await expenseService.findByMonth(2022,10);
+      const result = await expenseService.findByMonth(1,2022,10);
 
-      expect(expenseRepository.findByMonth).toHaveBeenCalledWith(2022,10);
+      expect(expenseRepository.findByMonth).toHaveBeenCalledWith(1,2022,10);
       expect(result).toEqual(mockReturnedExpense);
     });
   });
@@ -90,9 +97,12 @@ describe('expenseService: ', () => {
       expenseRepository.insert.mockResolvedValue({ identifiers: [{ id: 1 }] });
       expenseRepository.find.mockResolvedValue(mockReturnedExpense);
 
-      const result = await expenseService.create(mockExpense);
+      const result = await expenseService.create(1,mockExpense);
 
-      expect(expenseRepository.insert).toHaveBeenCalledWith(mockExpense);
+      expect(expenseRepository.insert).toHaveBeenCalledWith({
+        ...mockExpense,
+        userId: 1,
+      });
       expect(expenseRepository.find).toHaveBeenCalledWith({
         where: [{ id: 1 }],
       });
@@ -113,10 +123,13 @@ describe('expenseService: ', () => {
         .mockResolvedValueOnce(mockUpdatedExpense);
       expenseRepository.isMonthlyUnique.mockResolvedValue(true);
 
-      const result = await expenseService.update(1, { amount: 30 });
+      const result = await expenseService.update(1, 1, { amount: 30 });
 
       expect(expenseRepository.update).toHaveBeenCalledWith(1, { amount: 30 });
-      expect(expenseRepository.findOneBy).toHaveBeenCalledWith({ id: 1 });
+      expect(expenseRepository.findOneBy).toHaveBeenCalledWith({
+        id: 1,
+        userId: 1,
+      });
       expect(result).toEqual(mockUpdatedExpense);
     });
 
@@ -129,18 +142,24 @@ describe('expenseService: ', () => {
 
   describe('delete(): ', () => {
     it('should return deleted expense message', async () => {
+      expenseRepository.findOneBy.mockResolvedValue(mockExpense);
       expenseRepository.delete.mockResolvedValue({ affected: 1 });
 
-      const result = await expenseService.delete(1);
+      const result = await expenseService.delete(1,1);
 
+      expect(expenseRepository.findOneBy).toHaveBeenCalledWith({
+        id: 1,
+        userId: 1,
+      });
       expect(expenseRepository.delete).toHaveBeenCalledWith(1);
       expect(result).toEqual(`Expense with id 1 deleted`);
     });
 
     it('should return non existant expense message', async () => {
+      expenseRepository.findOneBy.mockResolvedValue(mockExpense);
       expenseRepository.delete.mockResolvedValue({ affected: 0 });
 
-      const result = await expenseService.delete(1);
+      const result = await expenseService.delete(1, 1);
 
       expect(expenseRepository.delete).toHaveBeenCalledWith(1);
       expect(result).toEqual(`Expense with id 1 does not exist`);

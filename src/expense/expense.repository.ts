@@ -10,30 +10,33 @@ export class ExpenseRepository extends Repository<Expense> {
   }
 
   async isMonthlyUnique(
+    userId: number,
     description: string,
     month: string,
     year: string,
-    id = 0,
+    expenseId = 0,
   ): Promise<boolean> {
     const result = await this.dataSource
       .createQueryBuilder()
       .select('expense')
       .from(Expense, 'expense')
       .where('expense.description = :description', { description })
-      .andWhere('expense.id != :id', { id })
+      .andWhere('expense.id != :expenseId', { expenseId })
+      .andWhere('expense.userId = :userId', { userId })
       .andWhere('EXTRACT("month" from  date) = :month', { month })
       .andWhere('EXTRACT("year" from date) = :year', { year })
       .getOne();
     return result ? false : true;
   }
   
-  async findByMonth(year: string, month: string): Promise<ReturnExpenseDTO[]> {
+  async findByMonth(userId: number, year: string, month: string): Promise<ReturnExpenseDTO[]> {
     return await this.dataSource
       .createQueryBuilder()
       .select('expense')
       .from(Expense, 'expense')
       .where('EXTRACT("year" from  date) = :year', { year })
       .andWhere('EXTRACT("month" from  date) = :month', { month })
+      .andWhere('expense.userId = :userId', { userId })
       .getMany()
   }
 }

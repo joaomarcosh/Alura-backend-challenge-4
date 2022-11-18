@@ -10,6 +10,7 @@ import { Connection } from 'typeorm';
 import { User } from '../src/user/user.entity';
 import { mockExpense, mockExpenseWithoutCategory } from '../src/expense/tests/expense-data.mock';
 import { JwtAuthGuard } from '../src/auth/jwt/jwt-auth.guard';
+import { MockJwtGuard } from './mocks/mock-jwt.guard';
 
 describe('ExpenseController (e2e)', () => {
   let app: NestFastifyApplication;
@@ -19,7 +20,7 @@ describe('ExpenseController (e2e)', () => {
       imports: [AppModule],
     })
     .overrideGuard(JwtAuthGuard)
-    .useValue({})
+    .useClass(MockJwtGuard)
     .compile();
 
     app = moduleRef.createNestApplication<NestFastifyApplication>(

@@ -41,7 +41,7 @@ describe('SummaryController (e2e)', () => {
     await connection.createQueryBuilder()
       .insert()
       .into(Expense)
-      .values(mockExpense)
+      .values({...mockExpense,userId:1})
       .execute()
     await connection.createQueryBuilder()
       .insert()

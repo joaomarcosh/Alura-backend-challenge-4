@@ -11,7 +11,6 @@ import {
   ClassSerializerInterceptor,
   Query,
   UseGuards,
-  Request,
 } from '@nestjs/common';
 import { UserId } from '../utils/decorators/user-id.decorator';
 import { IncomeService } from './income.service';

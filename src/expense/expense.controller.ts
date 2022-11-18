@@ -12,6 +12,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { UserId } from '../utils/decorators/user-id.decorator';
 import { ExpenseService } from './expense.service';
 import { CreateExpenseDTO } from './dtos/create-expense.dto';
 import { UpdateExpenseDTO } from './dtos/update-expense.dto';
@@ -25,37 +26,39 @@ export class ExpenseController {
   constructor(private expenseService: ExpenseService) {}
 
   @Get()
-  async findAll(@Query('description') description: string): Promise<ReturnExpenseDTO[]> {
-    return await this.expenseService.findAll(description);
+  async findAll(@UserId() userId: number, @Query('description') description: string): Promise<ReturnExpenseDTO[]> {
+    return await this.expenseService.findAll(userId, description);
   }
 
   @Get(':id')
   async findOneById(
+    @UserId() userId: number,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ReturnExpenseDTO> {
-    return await this.expenseService.findOneById(id);
+    return await this.expenseService.findOneById(userId, id);
   }
   
   @Get(':year/:month')
-  async findByMonth(@Param('year') year: string, @Param('month') month: string): Promise<ReturnExpenseDTO[]> {
-    return await this.expenseService.findByMonth(year,month);
+  async findByMonth(@UserId() userId: number, @Param('year') year: string, @Param('month') month: string): Promise<ReturnExpenseDTO[]> {
+    return await this.expenseService.findByMonth(userId,year,month);
   }
 
   @Post()
-  async create(@Body() expense: CreateExpenseDTO): Promise<ReturnExpenseDTO[]> {
-    return await this.expenseService.create(expense);
+  async create(@UserId() userId: number, @Body() expense: CreateExpenseDTO): Promise<ReturnExpenseDTO[]> {
+    return await this.expenseService.create(userId, expense);
   }
 
   @Put(':id')
   async update(
+    @UserId() userId: number,
     @Param('id', ParseIntPipe) id: number,
     @Body() expense: UpdateExpenseDTO,
   ): Promise<ReturnExpenseDTO> {
-    return await this.expenseService.update(id, expense);
+    return await this.expenseService.update(userId, id, expense);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<string> {
-    return await this.expenseService.delete(id);
+  async delete(@UserId() userId: number, @Param('id', ParseIntPipe) id: number): Promise<string> {
+    return await this.expenseService.delete(userId, id);
   }
 }

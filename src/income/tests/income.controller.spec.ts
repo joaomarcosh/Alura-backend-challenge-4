@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
-import { UserId } from '../../utils/decorators/user-id.decorator';
 import { IncomeController } from '../income.controller';
 import { IncomeService } from '../income.service';
 import {

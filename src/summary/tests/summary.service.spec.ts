@@ -51,7 +51,7 @@ describe('summaryService: ', () => {
 
       const result = await summaryService.getSummary(1,2022,10);
 
-      expect(expenseService.findByMonth).toHaveBeenCalledWith(2022,10);
+      expect(expenseService.findByMonth).toHaveBeenCalledWith(1,2022,10);
       expect(incomeService.findByMonth).toHaveBeenCalledWith(1,2022,10);
       expect(result).toMatchObject(mockSummary);
     });

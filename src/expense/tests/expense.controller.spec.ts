@@ -51,54 +51,54 @@ describe('ExpenseController: ', () => {
 
   describe('findAll(): ', () => {
     it('should return all expense', async () => {
-      const result = await expenseController.findAll('test');
+      const result = await expenseController.findAll(1,'test');
 
-      expect(expenseService.findAll).toHaveBeenCalledWith('test');
+      expect(expenseService.findAll).toHaveBeenCalledWith(1,'test');
       expect(result).toBe(mockReturnedExpense);
     });
   });
 
   describe('findOneById(): ', () => {
     it('should return one expense', async () => {
-      const result = await expenseController.findOneById(1);
+      const result = await expenseController.findOneById(1,1);
 
-      expect(expenseService.findOneById).toHaveBeenCalledWith(1);
+      expect(expenseService.findOneById).toHaveBeenCalledWith(1,1);
       expect(result).toBe(mockReturnedExpense);
     });
   });
   
   describe('findByMonth(): ', () => {
     it('should return all expense from the specified month', async () => {
-      const result = await expenseController.findByMonth(2022,10);
+      const result = await expenseController.findByMonth(1,2022,10);
 
-      expect(expenseService.findByMonth).toHaveBeenCalledWith(2022,10);
+      expect(expenseService.findByMonth).toHaveBeenCalledWith(1,2022,10);
       expect(result).toBe(mockReturnedExpense);
     });
   });
 
   describe('create(): ', () => {
     it('should return created expense', async () => {
-      const result = await expenseController.create(mockExpense);
+      const result = await expenseController.create(1,mockExpense);
 
-      expect(expenseService.create).toHaveBeenCalledWith(mockExpense);
+      expect(expenseService.create).toHaveBeenCalledWith(1,mockExpense);
       expect(result).toBe(mockReturnedExpense);
     });
   });
 
   describe('update(): ', () => {
     it('should return updated expense', async () => {
-      const result = await expenseController.update(1, { amount: 30 });
+      const result = await expenseController.update(1, 1, { amount: 30 });
 
-      expect(expenseService.update).toHaveBeenCalledWith(1, { amount: 30 });
+      expect(expenseService.update).toHaveBeenCalledWith(1, 1, { amount: 30 });
       expect(result).toBe(mockUpdatedExpense);
     });
   });
 
   describe('delete(): ', () => {
     it('should return deleted expense message', async () => {
-      const result = await expenseController.delete(1);
+      const result = await expenseController.delete(1, 1);
 
-      expect(expenseService.delete).toHaveBeenCalledWith(1);
+      expect(expenseService.delete).toHaveBeenCalledWith(1, 1);
       expect(result).toBe(`Expense with id 1 deleted`);
     });
   });

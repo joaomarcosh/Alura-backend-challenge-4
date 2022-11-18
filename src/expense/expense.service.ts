@@ -13,28 +13,30 @@ export class ExpenseService {
     private expenseRepository: ExpenseRepository,
   ) {}
 
-  async findAll(description: string): Promise<ReturnExpenseDTO[]> {
+  async findAll(userId: number, description: string = ''): Promise<ReturnExpenseDTO[]> {
     if (description) {
       return await this.expenseRepository.findBy({
-        description: ILike(description)
+        userId: userId,
+        description: ILike(description),
       })
     }
-    return await this.expenseRepository.find();
+    return await this.expenseRepository.findBy({ userId });
   }
 
-  async findOneById(id: number): Promise<ReturnExpenseDTO> {
-    return await this.expenseRepository.findOneBy({ id });
+  async findOneById(userId: number, id: number): Promise<ReturnExpenseDTO> {
+    return await this.expenseRepository.findOneBy({ userId,id });
   }
   
-  async findByMonth(year: string, month: string): Promise<ReturnExpenseDTO[]> {
-    return await this.expenseRepository.findByMonth(year, month);
+  async findByMonth(userId: number, year: string, month: string): Promise<ReturnExpenseDTO[]> {
+    return await this.expenseRepository.findByMonth(userId, year, month);
   }
 
-  async create(expense: CreateExpenseDTO): Promise<ReturnExpenseDTO[]> {
+  async create(userId: number, expense: CreateExpenseDTO): Promise<ReturnExpenseDTO[]> {
     const desc = expense.description;
     const date = expense.date.split('-');
 
     const unique = await this.expenseRepository.isMonthlyUnique(
+      userId,
       desc,
       date[1],
       date[0],
@@ -43,31 +45,28 @@ export class ExpenseService {
     if (!unique)
       throw new ConflictException('This expense already exists for this month');
 
-    const insertResult = await this.expenseRepository.insert(expense);
+    const insertResult = await this.expenseRepository.insert({...expense,userId});
     const createdExpense = await this.expenseRepository.find({
       where: [...insertResult.identifiers],
     });
     return createdExpense;
   }
 
-  async update(
-    id: number,
-    newInfo: UpdateExpenseDTO,
-  ): Promise<ReturnExpenseDTO> {
-    const oldInfo = await this.expenseRepository.findOneBy({ id });
+  async update(userId: number, id: number, newInfo: UpdateExpenseDTO): Promise<ReturnExpenseDTO> {
+    const oldInfo = await this.expenseRepository.findOneBy({ userId,id });
     const oldDate = oldInfo.date.split('-');
     const newDate = newInfo.date ? newInfo.date.split('-') : null;
 
     const desc = newInfo.description || oldInfo.description;
     const month = newDate ? newDate[1] : oldDate[1];
     const year = newDate ? newDate[0] : oldDate[0];
-    const oldId = oldInfo.id;
 
     const unique = await this.expenseRepository.isMonthlyUnique(
+      oldInfo.userId,
       desc,
       month,
       year,
-      oldId,
+      oldInfo.id,
     );
 
     if (!unique)
@@ -77,9 +76,11 @@ export class ExpenseService {
     return await this.expenseRepository.findOneBy({ id });
   }
 
-  async delete(id: number): Promise<string> {
-    const deleteResult = await this.expenseRepository.delete(id);
-    if (deleteResult.affected == 0)
+  async delete(userId: number, id: number): Promise<string> {
+    let deleteResult;
+    const expenseToDelete = await this.expenseRepository.findOneBy({ userId,id })
+    if (expenseToDelete) deleteResult = await this.expenseRepository.delete(id);
+    if (!deleteResult || deleteResult.affected == 0)
       return `Expense with id ${id} does not exist`;
     return `Expense with id ${id} deleted`;
   }

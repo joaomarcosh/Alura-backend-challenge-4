@@ -11,7 +11,7 @@ export class SummaryService {
   ) {}
   
   async getSummary(userId: number, year: string, month: string) {
-    const monthlyExpenses = await this.expenseService.findByMonth(year, month);
+    const monthlyExpenses = await this.expenseService.findByMonth(userId, year, month);
     const totalExpenseAmount = monthlyExpenses.reduce((total,expense) => total + expense.amount, 0);
     
     const monthlyIncomes = await this.incomeService.findByMonth(userId, year, month);
