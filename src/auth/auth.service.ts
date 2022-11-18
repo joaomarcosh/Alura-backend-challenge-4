@@ -3,6 +3,7 @@ import { UserRepository } from '../user/user.repository';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDTO } from '../user/dtos/create-user.dto';
+import { Roles } from '../user/enums/user-roles.enum';
 
 @Injectable()
 export class AuthService {
@@ -31,6 +32,7 @@ export class AuthService {
     if (user.password != user.passwordConfirmation) {
       throw new UnprocessableEntityException('Passwords do not match');
     } else {
+      user.role = Roles.User;
       await this.userRepository.createUser(user);
     }
   }
