@@ -60,6 +60,17 @@ describe('userService: ', () => {
       expect(result).toEqual(mockReturnedUser);
     });
   });
+  
+  describe('findOneByUsername(): ', () => {
+    it('should return one user', async () => {
+      userRepository.findOneBy.mockResolvedValue(mockReturnedUser);
+
+      const result = await userService.findOneByUsername('testUser');
+
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({ username: 'testUser' });
+      expect(result).toEqual(mockReturnedUser);
+    });
+  });
 
   describe('create(): ', () => {
     it('should return created user', async () => {

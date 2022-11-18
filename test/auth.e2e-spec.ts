@@ -6,8 +6,8 @@ import {
 import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import fastifyCookie from '@fastify/cookie';
-import { Connection } from 'typeorm';
 import { User } from '../src/user/user.entity';
+import { UserService } from '../src/user/user.service';
 import { Roles } from '../src/user/enums/user-roles.enum';
 import { mockIncome } from '../src/income/tests/income-data.mock';
 
@@ -29,6 +29,14 @@ describe('AuthController and general auth stuff (e2e)', () => {
     await app.register(fastifyCookie);
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
+    
+    const userService = await app.get(UserService);
+    userService.create({
+      username: 'admin',
+      password: '12345678',
+      passwordConfirmation: '12345678',
+      role: Roles.Admin,
+    });
   });
   
   afterAll(async () => {
@@ -117,19 +125,12 @@ describe('AuthController and general auth stuff (e2e)', () => {
   describe('/user (GET)', () => {
     it('should return status 200 if using Auth cookie and proper role', async () => {
       let adminToken;
-      
-      await app
-        .inject({
-          method: 'POST',
-          url: '/auth/signup',
-          payload: { username: "admin", role: Roles.Admin, password: "12345678", passwordConfirmation: "12345678" },
-        })
-      
+
       await app
         .inject({
           method: 'POST',
           url: '/auth/login',
-          payload: { username: "admin", password: "12345678" },
+          payload: { username: 'admin', password: '12345678' },
         }).then((response) => {
           adminToken = response.cookies[0]['value'];
         });

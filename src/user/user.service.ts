@@ -20,8 +20,8 @@ export class UserService {
     return await this.userRepository.findOneBy({ id });
   }
   
-  async findOneByUsername(username: string): Promise<User[]> {
-    return await this.userRepository.findBy({ username });
+  async findOneByUsername(username: string): Promise<User> {
+    return await this.userRepository.findOneBy({ username });
   }
   
   async create(user: CreateUserDTO): Promise<User[]> {

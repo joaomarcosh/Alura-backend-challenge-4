@@ -26,7 +26,8 @@ async function bootstrap() {
   await app.listen(port);
   
   const userService = await app.get(UserService);
-  if (!userService.findOneByUsername(process.env.ADMIN_USER)) {
+  const adminExists = await userService.findOneByUsername(process.env.ADMIN_USER);
+  if (!adminExists) {
     userService.create({
       username: process.env.ADMIN_USER,
       password: process.env.ADMIN_PASS,
