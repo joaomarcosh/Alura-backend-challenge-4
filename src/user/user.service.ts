@@ -20,6 +20,10 @@ export class UserService {
     return await this.userRepository.findOneBy({ id });
   }
   
+  async findOneByUsername(username: string): Promise<User[]> {
+    return await this.userRepository.findBy({ username });
+  }
+  
   async create(user: CreateUserDTO): Promise<User[]> {
     const insertResult = await this.userRepository.createUser(user);
     const createdUser = await this.userRepository.find({
