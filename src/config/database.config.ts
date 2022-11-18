@@ -11,7 +11,7 @@ export default {
   },
   development: {
     type: process.env.DEV_DB_TYPE,
-    host: process.env.DEV_DB_HOST,
+    host: process.env.DEV_DB_HOST || "localhost",
     port: parseInt(process.env.DEV_DB_PORT, 10) || 5432,
     username: process.env.DEV_DB_USER,
     password: process.env.DEV_DB_PASS,
