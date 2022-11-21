@@ -12,14 +12,14 @@ services:
     volumes:
       - api-logs:/usr/src/node-api/logs:rw
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
     depends_on:
       - pgsql
       
   pgsql:
     image: postgres:alpine
     ports:
-      - 4321:5432
+      - 5432:5432
     container_name: 'pgsql'
     restart: always
     volumes:
