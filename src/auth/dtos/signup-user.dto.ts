@@ -3,22 +3,23 @@ import {
   IsNotEmpty,
   Length,
   IsOptional,
-  IsEnum
 } from 'class-validator';
-import { Roles } from '../enums/user-roles.enum';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateUserDTO {
+export class SignupUserDTO {
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @Length(4, 32)
   username: string;
-  
-  @IsOptional()
-  @IsEnum(Roles, { message: 'Role must be user or admin'})
-  role: Roles;
 
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @Length(8, 32)
   password: string;
+  
+  @ApiProperty()
+  @IsOptional()
+  passwordConfirmation: string;
 }

@@ -5,8 +5,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { ExpenseCategories } from './enums/expense-categories.enum';
@@ -20,8 +19,8 @@ export class Expense {
   id: number;
   
   @Exclude()
-  @OneToOne(() => User, { onDelete: "CASCADE"})
-  @JoinColumn()
+  @ManyToOne(() => User, { onDelete: "CASCADE"})
+  @Column()
   userId: number;
 
   @Column()

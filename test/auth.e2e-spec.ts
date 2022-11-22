@@ -34,7 +34,6 @@ describe('AuthController and general auth stuff (e2e)', () => {
     userService.create({
       username: 'admin',
       password: '12345678',
-      passwordConfirmation: '12345678',
       role: Roles.Admin,
     });
   });

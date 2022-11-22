@@ -13,8 +13,6 @@ export class CreateExpenseDTO {
   @IsNotEmpty()
   description: string;
   
-  userId: number;
-  
   @IsOptional()
   @IsEnum(ExpenseCategories, { message: 'Category must be one of the following: food, health, housing, transportation, education, leisure, unexpected, other.'})
   category: string;

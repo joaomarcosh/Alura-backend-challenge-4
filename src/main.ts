@@ -42,7 +42,6 @@ async function bootstrap() {
     userService.create({
       username: process.env.ADMIN_USER,
       password: process.env.ADMIN_PASS,
-      passwordConfirmation: process.env.ADMIN_PASS,
       role: Roles.Admin,
     });
   }

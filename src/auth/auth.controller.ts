@@ -2,7 +2,7 @@ import { Controller, Request, Post, UseGuards, Response, HttpCode, Body } from '
 import { LocalAuthGuard } from './local/local-auth.guard';
 import { AuthService } from './auth.service';
 import { FastifyReply } from 'fastify';
-import { CreateUserDTO } from '../user/dtos/create-user.dto';
+import { SignupUserDTO } from './dtos/signup-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,7 +17,7 @@ export class AuthController {
   }
   
   @Post('signup')
-  async signUp(@Body() user: CreateUserDTO) {
+  async signUp(@Body() user: SignupUserDTO) {
     await this.authService.signUp(user);
   }
 }

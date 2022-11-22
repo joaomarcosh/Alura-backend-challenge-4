@@ -6,8 +6,8 @@ import {
 import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import fastifyCookie from '@fastify/cookie';
-import { Connection } from 'typeorm';
-import { User } from '../src/user/user.entity';
+import { UserService } from '../src/user/user.service';
+import { Roles } from '../src/user/enums/user-roles.enum';
 import { mockExpense, mockExpenseWithoutCategory } from '../src/expense/tests/expense-data.mock';
 import { JwtAuthGuard } from '../src/auth/jwt/jwt-auth.guard';
 import { MockJwtGuard } from './mocks/mock-jwt.guard';
@@ -34,6 +34,13 @@ describe('ExpenseController (e2e)', () => {
     });
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
+    
+    const userService = await app.get(UserService);
+    await userService.create({
+      username: 'user',
+      password: '12345678',
+      role: Roles.User,
+    });
   });
   
   afterAll(async () => {
@@ -41,7 +48,7 @@ describe('ExpenseController (e2e)', () => {
   });
 
   describe('/expense (POST)', () => {
-    it('should return status 201 and created expense', () => {
+    it('should return status 201 and created expense', async () => {
       return app
         .inject({
           method: 'POST',

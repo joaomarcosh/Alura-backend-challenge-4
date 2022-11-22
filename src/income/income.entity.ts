@@ -5,8 +5,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { User } from '../user/user.entity';
@@ -19,8 +18,8 @@ export class Income {
   id: number;
   
   @Exclude()
-  @OneToOne(() => User, { onDelete: "CASCADE"})
-  @JoinColumn()
+  @ManyToOne(() => User, { onDelete: "CASCADE"})
+  @Column()
   userId: number;
 
   @Column()

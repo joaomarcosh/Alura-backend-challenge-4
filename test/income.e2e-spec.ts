@@ -6,8 +6,8 @@ import {
 import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import fastifyCookie from '@fastify/cookie';
-import { Connection } from 'typeorm';
-import { User } from '../src/user/user.entity';
+import { UserService } from '../src/user/user.service';
+import { Roles } from '../src/user/enums/user-roles.enum';
 import { mockIncome } from '../src/income/tests/income-data.mock';
 import { JwtAuthGuard } from '../src/auth/jwt/jwt-auth.guard';
 import { MockJwtGuard } from './mocks/mock-jwt.guard';
@@ -32,6 +32,13 @@ describe('IncomeController (e2e)', () => {
     await app.register(fastifyCookie);
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
+    
+    const userService = await app.get(UserService);
+    await userService.create({
+      username: 'user',
+      password: '12345678',
+      role: Roles.User,
+    });
   });
   
   afterAll(async () => {

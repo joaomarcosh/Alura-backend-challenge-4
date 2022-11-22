@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { User } from './user.entity';
 import { CreateUserDTO } from './dtos/create-user.dto';
+import { SignupUserDTO } from '../auth/dtos/signup-user.dto';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -14,7 +15,7 @@ export class UserRepository extends Repository<User> {
     super(User, dataSource.createEntityManager());
   }
   
-  async createUser(user: CreateUserDTO): Promise<InsertResult> {
+  async createUser(user: SignupUserDTO | CreateUserDTO): Promise<InsertResult> {
     const salt = bcrypt.genSaltSync(10);
     user.password = bcrypt.hashSync(user.password, salt);
     

@@ -9,8 +9,6 @@ export class CreateIncomeDTO {
   @IsString()
   @IsNotEmpty()
   description: string;
-  
-  userId: number;
 
   @IsPositive()
   amount: number;

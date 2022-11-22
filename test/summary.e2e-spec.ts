@@ -6,10 +6,10 @@ import {
 import { AppModule } from '../src/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import fastifyCookie from '@fastify/cookie';
-import { Connection } from 'typeorm';
-import { User } from '../src/user/user.entity';
-import { Expense } from '../src/expense/expense.entity';
-import { Income } from '../src/income/income.entity';
+import { IncomeService } from '../src/income/income.service';
+import { ExpenseService } from '../src/expense/expense.service';
+import { UserService } from '../src/user/user.service';
+import { Roles } from '../src/user/enums/user-roles.enum';
 import { mockIncome } from '../src/income/tests/income-data.mock';
 import { mockExpense } from '../src/expense/tests/expense-data.mock';
 import { mockSummary } from '../src/summary/tests/summary-data.mock';
@@ -37,17 +37,16 @@ describe('SummaryController (e2e)', () => {
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
     
-    const connection = await app.get(Connection);
-    await connection.createQueryBuilder()
-      .insert()
-      .into(Expense)
-      .values({...mockExpense,userId:1})
-      .execute()
-    await connection.createQueryBuilder()
-      .insert()
-      .into(Income)
-      .values({...mockIncome,userId:1})
-      .execute()
+    const userService = await app.get(UserService);
+    await userService.create({
+      username: 'user',
+      password: '12345678',
+      role: Roles.User,
+    });
+    const expenseService = await app.get(ExpenseService);
+    await expenseService.create(1, mockExpense);
+    const incomeService = await app.get(IncomeService);
+    await incomeService.create(1, mockIncome);
   });
   
   afterAll(async () => {
