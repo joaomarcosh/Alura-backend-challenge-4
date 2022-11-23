@@ -12,6 +12,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { ApiQuery } from '@nestjs/swagger';
 import { UserId } from '../utils/decorators/user-id.decorator';
 import { IncomeService } from './income.service';
 import { CreateIncomeDTO } from './dtos/create-income.dto';
@@ -25,6 +26,7 @@ import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 export class IncomeController {
   constructor(private incomeService: IncomeService) {}
 
+  @ApiQuery({ name: 'description', required: false })
   @Get()
   async findAll(@UserId() userId: number, @Query('description') description: string): Promise<ReturnIncomeDTO[]> {
     return await this.incomeService.findAll(userId, description);

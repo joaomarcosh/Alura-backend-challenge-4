@@ -12,6 +12,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { ApiQuery, ApiResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { UserId } from '../utils/decorators/user-id.decorator';
 import { ExpenseService } from './expense.service';
 import { CreateExpenseDTO } from './dtos/create-expense.dto';
@@ -25,6 +26,7 @@ import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 export class ExpenseController {
   constructor(private expenseService: ExpenseService) {}
 
+  @ApiQuery({ name: 'description', required: false })
   @Get()
   async findAll(@UserId() userId: number, @Query('description') description: string): Promise<ReturnExpenseDTO[]> {
     return await this.expenseService.findAll(userId, description);

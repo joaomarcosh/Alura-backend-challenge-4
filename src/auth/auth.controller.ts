@@ -1,13 +1,16 @@
 import { Controller, Request, Post, UseGuards, Response, HttpCode, Body } from '@nestjs/common';
+import { ApiBody } from '@nestjs/swagger';
 import { LocalAuthGuard } from './local/local-auth.guard';
 import { AuthService } from './auth.service';
 import { FastifyReply } from 'fastify';
 import { SignupUserDTO } from './dtos/signup-user.dto';
+import { LoginUserDTO } from './dtos/login-user.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
   
+  @ApiBody({ type: LoginUserDTO })
   @UseGuards(LocalAuthGuard)
   @HttpCode(204)
   @Post('login')
