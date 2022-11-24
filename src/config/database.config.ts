@@ -11,11 +11,11 @@ export default {
   },
   development: {
     type: process.env.DEV_DB_TYPE || "postgres",
-    host: process.env.DEV_DB_HOST || "localhost",
+    host: process.env.DEV_DB_HOST || "pgsql",
     port: parseInt(process.env.DEV_DB_PORT, 10) || 5432,
     username: process.env.DEV_DB_USER || "pguser",
     password: process.env.DEV_DB_PASS || "pgpassword",
-    database: process.env.DEV_DB_NAME || "alura",
+    database: process.env.DEV_DB_NAME || "pguser",
     dropSchema: true,
     synchronize: true,
   },

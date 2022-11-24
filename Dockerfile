@@ -13,4 +13,4 @@ RUN npm install
 EXPOSE 3000
 
 # initialize API
-CMD [ "npm","run", "start" ]
+CMD [ "npm","run", "start:dev" ]
