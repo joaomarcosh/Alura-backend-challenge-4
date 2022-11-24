@@ -1,73 +1,43 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Repository to share my code for the fourth backend challenge from Alura. The objective of this challenge was to develop an API for a financial control app and deploy it.
+The deployed version can be accessed on http://104.248.119.154:3000/api
 
-## Installation
+## Requirements
 
-```bash
-$ npm install
-```
+To run this project you will need at least **Docker** and **Docker Compose**. Optionally, you can also have **Git** to clone the repository and **Node.js** to run the project without Docker.
 
 ## Running the app
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
+First, download and extract the project folder or directly clone it with **Git**:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Will create a folder called Alura-backend-challenge-4 in your current folder
+git clone https://github.com/joaomarcosh/Alura-backend-challenge-4
 ```
 
-## Support
+After that you access the project directory in the terminal and run it with **Docker Compose**:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+# Change the current folder
+cd Alura-backend-challenge-4/
 
-## Stay in touch
+# Run the project with Docker
+docker compose up
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+If not using docker you will have to manually set up a database and change the database info in the base .env file provided.
 
-## License
+Once the API is up and running you can access it on http://localhost:3000/api for a Swagger UI with the documentaion of the routes.
 
-Nest is [MIT licensed](LICENSE).
+## The database
+
+It contains 3 tables: *Income*, *Expens*e and *User*. Both the Income and the Expense tables have a many-to-one relation with the User table.
+
+![](https://i.imgur.com/5kC4jtQ.png)
+
+## The API
+
+Basic CRUDs are available for all tables and there are endpoints for accessing a monthly summary of your incomes and expenses, aswell as endpoints for signing up and for login.
+Most of the endpoints are protected by a JWT-based authentication system which means you need to be logged in to access the API. There are no restrictions for signing up a new user and once you log in you will receive a JWT token that will be stored in your cookies and will be sent with every request made to the API. In addition, the User endpoints are also protected by a role based authorization system, and can only be accessed by users with the admin role.
+A basic documentation of the endpoints is available at `/api`.
