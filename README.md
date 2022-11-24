@@ -1,6 +1,7 @@
 ## Description
 
 Repository to share my code for the fourth backend challenge from Alura. The objective of this challenge was to develop an API for a financial control app and deploy it.
+
 The deployed version can be accessed on http://104.248.119.154:3000/api
 
 ## Requirements
@@ -28,7 +29,7 @@ docker compose up
 
 If not using docker you will have to manually set up a database and change the database info in the base .env file provided.
 
-Once the API is up and running you can access it on http://localhost:3000/api for a Swagger UI with the documentaion of the routes.
+Once the API is up and running you can access it on http://localhost:3000/api for a Swagger UI with the documentation of the routes.
 
 ## The database
 
@@ -39,5 +40,7 @@ It contains 3 tables: *Income*, *Expens*e and *User*. Both the Income and the Ex
 ## The API
 
 Basic CRUDs are available for all tables and there are endpoints for accessing a monthly summary of your incomes and expenses, aswell as endpoints for signing up and for login.
+
 Most of the endpoints are protected by a JWT-based authentication system which means you need to be logged in to access the API. There are no restrictions for signing up a new user and once you log in you will receive a JWT token that will be stored in your cookies and will be sent with every request made to the API. In addition, the User endpoints are also protected by a role based authorization system, and can only be accessed by users with the admin role.
+
 A basic documentation of the endpoints is available at `/api`.
