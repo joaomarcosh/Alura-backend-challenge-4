@@ -1,5 +1,5 @@
 export default {
-  test: { host: '127.0.0.1' },
-  development: { host: '127.0.0.1' },
-  production: { host: '0.0.0.0' },
+  test: { host: process.env.TEST_SERVER_HOST },
+  development: { host: process.env.DEV_SERVER_HOST },
+  production: { host: process.env.PROD_SERVER_HOST },
 }
