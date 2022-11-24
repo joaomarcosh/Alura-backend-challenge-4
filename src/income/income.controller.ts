@@ -12,7 +12,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiQuery } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UserId } from '../utils/decorators/user-id.decorator';
 import { IncomeService } from './income.service';
 import { CreateIncomeDTO } from './dtos/create-income.dto';
@@ -20,6 +20,7 @@ import { UpdateIncomeDTO } from './dtos/update-income.dto';
 import { ReturnIncomeDTO } from './dtos/return-income.dto';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 
+@ApiTags('Income Controller')
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard)
 @Controller('income')

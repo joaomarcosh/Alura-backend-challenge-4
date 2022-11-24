@@ -12,7 +12,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiQuery, ApiResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UserId } from '../utils/decorators/user-id.decorator';
 import { ExpenseService } from './expense.service';
 import { CreateExpenseDTO } from './dtos/create-expense.dto';
@@ -20,6 +20,7 @@ import { UpdateExpenseDTO } from './dtos/update-expense.dto';
 import { ReturnExpenseDTO } from './dtos/return-expense.dto';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 
+@ApiTags('Expense Controller')
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(JwtAuthGuard)
 @Controller('expense')

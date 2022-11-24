@@ -29,6 +29,11 @@ async function bootstrap() {
     .setTitle('Alura backend challenge 4')
     .setDescription('Challenge API')
     .setVersion('1.0')
+    .addTag('Income Controller')
+    .addTag('Expense Controller')
+    .addTag('Summary Controller')
+    .addTag('User Controller')
+    .addTag('Auth Controller')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

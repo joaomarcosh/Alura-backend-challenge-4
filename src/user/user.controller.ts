@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { RoleGuard } from '../auth/role/role.guard';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { Role } from '../auth/role/role.decorator';
@@ -20,6 +21,7 @@ import { UserService } from './user.service';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { UpdateUserDTO } from './dtos/update-user.dto';
 
+@ApiTags('User Controller')
 @UseInterceptors(ClassSerializerInterceptor)
 @Role(Roles.Admin)
 @UseGuards(JwtAuthGuard,RoleGuard)
