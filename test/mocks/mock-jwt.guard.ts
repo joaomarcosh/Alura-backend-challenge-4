@@ -8,4 +8,3 @@ export class MockJwtGuard implements CanActivate {
     return true;
   }
 }
-

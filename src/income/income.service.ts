@@ -13,25 +13,32 @@ export class IncomeService {
     private incomeRepository: IncomeRepository,
   ) {}
 
-  async findAll(userId: number, description: string = ''): Promise<ReturnIncomeDTO[]> {
+  async findAll(userId: number, description = ''): Promise<ReturnIncomeDTO[]> {
     if (description) {
       return await this.incomeRepository.findBy({
         userId: userId,
         description: ILike(description),
-      })
+      });
     }
     return await this.incomeRepository.findBy({ userId });
   }
 
   async findOneById(userId: number, id: number): Promise<ReturnIncomeDTO> {
-    return await this.incomeRepository.findOneBy({ userId,id });
+    return await this.incomeRepository.findOneBy({ userId, id });
   }
-  
-  async findByMonth(userId: number, year: string, month: string): Promise<ReturnIncomeDTO[]> {
+
+  async findByMonth(
+    userId: number,
+    year: string,
+    month: string,
+  ): Promise<ReturnIncomeDTO[]> {
     return await this.incomeRepository.findByMonth(userId, year, month);
   }
 
-  async create(userId: number, income: CreateIncomeDTO): Promise<ReturnIncomeDTO[]> {
+  async create(
+    userId: number,
+    income: CreateIncomeDTO,
+  ): Promise<ReturnIncomeDTO[]> {
     const desc = income.description;
     const date = income.date.split('-');
 
@@ -45,15 +52,22 @@ export class IncomeService {
     if (!unique)
       throw new ConflictException('This income already exists for this month');
 
-    const insertResult = await this.incomeRepository.insert({...income,userId});
+    const insertResult = await this.incomeRepository.insert({
+      ...income,
+      userId,
+    });
     const createdIncome = await this.incomeRepository.find({
       where: [...insertResult.identifiers],
     });
     return createdIncome;
   }
 
-  async update(userId: number, id: number, newInfo: UpdateIncomeDTO): Promise<ReturnIncomeDTO> {
-    const oldInfo = await this.incomeRepository.findOneBy({ userId,id });
+  async update(
+    userId: number,
+    id: number,
+    newInfo: UpdateIncomeDTO,
+  ): Promise<ReturnIncomeDTO> {
+    const oldInfo = await this.incomeRepository.findOneBy({ userId, id });
     const oldDate = oldInfo.date.split('-');
     const newDate = newInfo.date ? newInfo.date.split('-') : null;
 
@@ -78,7 +92,10 @@ export class IncomeService {
 
   async delete(userId: number, id: number): Promise<string> {
     let deleteResult;
-    const incomeToDelete = await this.incomeRepository.findOneBy({ userId,id })
+    const incomeToDelete = await this.incomeRepository.findOneBy({
+      userId,
+      id,
+    });
     if (incomeToDelete) deleteResult = await this.incomeRepository.delete(id);
     if (!deleteResult || deleteResult.affected == 0)
       return `Income with id ${id} does not exist`;

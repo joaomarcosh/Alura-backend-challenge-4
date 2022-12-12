@@ -10,17 +10,17 @@ export default {
     synchronize: true,
   },
   development: {
-    type: process.env.DEV_DB_TYPE || "postgres",
-    host: process.env.DEV_DB_HOST || "pgsql",
+    type: process.env.DEV_DB_TYPE || 'postgres',
+    host: process.env.DEV_DB_HOST || 'pgsql',
     port: parseInt(process.env.DEV_DB_PORT, 10) || 5432,
-    username: process.env.DEV_DB_USER || "pguser",
-    password: process.env.DEV_DB_PASS || "pgpassword",
-    database: process.env.DEV_DB_NAME || "pguser",
+    username: process.env.DEV_DB_USER || 'pguser',
+    password: process.env.DEV_DB_PASS || 'pgpassword',
+    database: process.env.DEV_DB_NAME || 'pguser',
     dropSchema: true,
     synchronize: true,
   },
   production: {
-    type: process.env.PROD_DB_TYPE || "postgres",
+    type: process.env.PROD_DB_TYPE || 'postgres',
     host: process.env.PROD_DB_HOST,
     port: parseInt(process.env.PROD_DB_PORT, 10) || 5432,
     username: process.env.PROD_DB_USER,
@@ -28,6 +28,5 @@ export default {
     database: process.env.PROD_DB_NAME,
     dropSchema: false,
     synchronize: false,
-  } 
+  },
 };
-

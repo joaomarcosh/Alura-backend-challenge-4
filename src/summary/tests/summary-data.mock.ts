@@ -11,5 +11,5 @@ export const mockSummary = {
     leisure: 0,
     unexpected: 20,
     other: 0,
-  }
+  },
 };

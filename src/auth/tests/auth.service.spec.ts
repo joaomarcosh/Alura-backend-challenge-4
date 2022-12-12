@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from '../auth.service';
-import { AuthRepository } from '../auth.repository';
 import { UserRepository } from '../../user/user.repository';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
@@ -56,42 +55,51 @@ describe('authService: ', () => {
       userRepository.findOneBy.mockResolvedValue(mockUser);
       bcrypt.compareSync = jest.fn().mockReturnValue(true);
 
-      const result = await authService.validateUser('test','pass');
+      const result = await authService.validateUser('test', 'pass');
 
-      expect(userRepository.findOneBy).toHaveBeenCalledWith({username:'test'});
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({
+        username: 'test',
+      });
       expect(result).toEqual(mockUserNoPassword);
     });
-    
+
     it('should return null if passwords dont match', async () => {
       userRepository.findOneBy.mockResolvedValue(mockUser);
       bcrypt.compareSync = jest.fn().mockReturnValue(false);
 
-      const result = await authService.validateUser('test','pass');
+      const result = await authService.validateUser('test', 'pass');
 
-      expect(userRepository.findOneBy).toHaveBeenCalledWith({username:'test'});
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({
+        username: 'test',
+      });
       expect(result).toEqual(null);
     });
   });
-  
+
   describe('login(): ', () => {
     it('should return object with access_token', async () => {
       jwtService.sign.mockReturnValue('test token');
-      
+
       const result = await authService.login(mockUser);
-      
-      expect(jwtService.sign).toHaveBeenCalledWith({username:'test',sub:1});
+
+      expect(jwtService.sign).toHaveBeenCalledWith({
+        username: 'test',
+        sub: 1,
+      });
       expect(result).toEqual(mockAccessToken);
     });
   });
-  
+
   describe('signUp(): ', () => {
-    it('should call userRepository.createUser with user', async () => {  
-      const result = await authService.signUp(mockUserWithConfirmation);
-      
-      expect(userRepository.createUser).toHaveBeenCalledWith(mockUserWithConfirmation);
+    it('should call userRepository.createUser with user', async () => {
+      await authService.signUp(mockUserWithConfirmation);
+
+      expect(userRepository.createUser).toHaveBeenCalledWith(
+        mockUserWithConfirmation,
+      );
     });
-    
-    it('should throw UnprocessableEntityException', async () => {  
+
+    it('should throw UnprocessableEntityException', async () => {
       await expect(authService.signUp(mockUser)).rejects.toThrow();
     });
   });

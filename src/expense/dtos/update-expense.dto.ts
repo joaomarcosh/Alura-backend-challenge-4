@@ -15,10 +15,18 @@ export class UpdateExpenseDTO {
   @IsString()
   @IsNotEmpty()
   description: string;
-  
-  @ApiProperty({ enum: ExpenseCategories, default: 'other', example: 'food', required: false })
+
+  @ApiProperty({
+    enum: ExpenseCategories,
+    default: 'other',
+    example: 'food',
+    required: false,
+  })
   @IsOptional()
-  @IsEnum(ExpenseCategories, { message: 'Category must be one of the following: food, health, housing, transportation, education, leisure, unexpected, other.'})
+  @IsEnum(ExpenseCategories, {
+    message:
+      'Category must be one of the following: food, health, housing, transportation, education, leisure, unexpected, other.',
+  })
   category: string;
 
   @ApiProperty({ example: 25, required: false })
@@ -26,7 +34,11 @@ export class UpdateExpenseDTO {
   @IsPositive()
   amount: number;
 
-  @ApiProperty({ example: '2022-11-23', description: 'format yyyy-mm-dd' , required: false })
+  @ApiProperty({
+    example: '2022-11-23',
+    description: 'format yyyy-mm-dd',
+    required: false,
+  })
   @IsOptional()
   @IsDateString()
   date: string;

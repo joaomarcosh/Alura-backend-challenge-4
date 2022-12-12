@@ -1,11 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from '../user.service';
 import { UserRepository } from '../user.repository';
-import {
-  mockUser,
-  mockReturnedUser,
-  mockUpdatedUser,
-} from './user-data.mock';
+import { mockUser, mockReturnedUser, mockUpdatedUser } from './user-data.mock';
 
 const mockUserRepository = () => ({
   find: jest.fn(),
@@ -60,14 +56,16 @@ describe('userService: ', () => {
       expect(result).toEqual(mockReturnedUser);
     });
   });
-  
+
   describe('findOneByUsername(): ', () => {
     it('should return one user', async () => {
       userRepository.findOneBy.mockResolvedValue(mockReturnedUser);
 
       const result = await userService.findOneByUsername('testUser');
 
-      expect(userRepository.findOneBy).toHaveBeenCalledWith({ username: 'testUser' });
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({
+        username: 'testUser',
+      });
       expect(result).toEqual(mockReturnedUser);
     });
   });
@@ -93,7 +91,9 @@ describe('userService: ', () => {
 
       const result = await userService.update(1, { password: 'abcdefgh' });
 
-      expect(userRepository.update).toHaveBeenCalledWith(1, { password: 'abcdefgh' });
+      expect(userRepository.update).toHaveBeenCalledWith(1, {
+        password: 'abcdefgh',
+      });
       expect(userRepository.findOneBy).toHaveBeenCalledWith({ id: 1 });
       expect(result).toEqual(mockUpdatedUser);
     });

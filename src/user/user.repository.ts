@@ -14,25 +14,25 @@ export class UserRepository extends Repository<User> {
   constructor(private dataSource: DataSource) {
     super(User, dataSource.createEntityManager());
   }
-  
+
   async createUser(user: SignupUserDTO | CreateUserDTO): Promise<InsertResult> {
     const salt = bcrypt.genSaltSync(10);
     user.password = bcrypt.hashSync(user.password, salt);
-    
+
     const finalUser = { ...user, salt };
-    
+
     let insertResult;
-    
+
     try {
       insertResult = await this.insert(finalUser);
-    } catch(error) {
+    } catch (error) {
       if (error.code.toString() === '23505') {
         throw new ConflictException('Username already exists');
       } else {
         throw new InternalServerErrorException('Error saving user to database');
       }
     }
-    
+
     return insertResult;
   }
 }

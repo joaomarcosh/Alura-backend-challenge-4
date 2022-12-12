@@ -15,7 +15,7 @@ describe('AuthController: ', () => {
   let authController: AuthController;
   let authService: AuthService;
 
-  beforeAll(async () => {  
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
     })
@@ -48,12 +48,12 @@ describe('AuthController: ', () => {
 
   describe('login(): ', () => {
     it('should call login with user', async () => {
-      await authController.login(mockRequest,mockResponse);
+      await authController.login(mockRequest, mockResponse);
 
       expect(authService.login).toHaveBeenCalledWith(mockUser);
     });
   });
-  
+
   describe('signUp(): ', () => {
     it('should call signUp with user', async () => {
       await authController.signUp(mockUser);

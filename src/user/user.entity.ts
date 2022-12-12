@@ -16,14 +16,14 @@ export class User {
 
   @Column({ unique: true })
   username: string;
-  
+
   @Column({ default: Roles.User })
   role: Roles;
 
   @Exclude()
   @Column()
   password: string;
-  
+
   @Exclude()
   @Column()
   salt: string;

@@ -2,8 +2,8 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 
-import * as dotenv from 'dotenv'
-dotenv.config()
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -17,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: process.env.JWT_SECRET,
     });
   }
-  
+
   private static extractJWT(req): string | null {
     if (req.cookies.token) {
       return req.cookies.token;
@@ -29,4 +29,3 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return { id: payload.sub, username: payload.username, role: payload.role };
   }
 }
-

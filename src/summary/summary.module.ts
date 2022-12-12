@@ -5,7 +5,7 @@ import { ExpenseModule } from '../expense/expense.module';
 import { IncomeModule } from '../income/income.module';
 
 @Module({
-  imports: [ExpenseModule,IncomeModule],
+  imports: [ExpenseModule, IncomeModule],
   providers: [SummaryService],
   controllers: [SummaryController],
 })

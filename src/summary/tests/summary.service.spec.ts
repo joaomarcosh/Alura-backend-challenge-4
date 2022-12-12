@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SummaryService } from '../summary.service';
 import { IncomeService } from '../../income/income.service';
-import { ExpenseModule } from '../../expense/expense.module';
 import { ExpenseService } from '../../expense/expense.service';
 import { mockSummary } from './summary-data.mock';
 import { mockIncome } from '../../income/tests/income-data.mock';
@@ -43,16 +42,16 @@ describe('summaryService: ', () => {
   it('should be defined', () => {
     expect(summaryService).toBeDefined();
   });
-  
+
   describe('getSummary(): ', () => {
     it('should return one expense', async () => {
       expenseService.findByMonth.mockResolvedValue([mockExpense]);
       incomeService.findByMonth.mockResolvedValue([mockIncome]);
 
-      const result = await summaryService.getSummary(1,2022,10);
+      const result = await summaryService.getSummary(1, 2022, 10);
 
-      expect(expenseService.findByMonth).toHaveBeenCalledWith(1,2022,10);
-      expect(incomeService.findByMonth).toHaveBeenCalledWith(1,2022,10);
+      expect(expenseService.findByMonth).toHaveBeenCalledWith(1, 2022, 10);
+      expect(incomeService.findByMonth).toHaveBeenCalledWith(1, 2022, 10);
       expect(result).toMatchObject(mockSummary);
     });
   });

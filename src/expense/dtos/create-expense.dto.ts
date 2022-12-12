@@ -14,10 +14,18 @@ export class CreateExpenseDTO {
   @IsString()
   @IsNotEmpty()
   description: string;
-  
-  @ApiProperty({ enum: ExpenseCategories, default: 'other', example: 'food', required: false })
+
+  @ApiProperty({
+    enum: ExpenseCategories,
+    default: 'other',
+    example: 'food',
+    required: false,
+  })
   @IsOptional()
-  @IsEnum(ExpenseCategories, { message: 'Category must be one of the following: food, health, housing, transportation, education, leisure, unexpected, other.'})
+  @IsEnum(ExpenseCategories, {
+    message:
+      'Category must be one of the following: food, health, housing, transportation, education, leisure, unexpected, other.',
+  })
   category: string;
 
   @ApiProperty({ example: 25 })

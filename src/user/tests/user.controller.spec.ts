@@ -2,11 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
 import { UserController } from '../user.controller';
 import { UserService } from '../user.service';
-import {
-  mockUser,
-  mockReturnedUser,
-  mockUpdatedUser,
-} from './user-data.mock';
+import { mockUser, mockReturnedUser, mockUpdatedUser } from './user-data.mock';
 
 const moduleMocker = new ModuleMocker(global);
 
@@ -79,7 +75,9 @@ describe('UserController: ', () => {
     it('should return updated user', async () => {
       const result = await userController.update(1, { password: 'abcdefgh' });
 
-      expect(userService.update).toHaveBeenCalledWith(1, { password: 'abcdefgh' });
+      expect(userService.update).toHaveBeenCalledWith(1, {
+        password: 'abcdefgh',
+      });
       expect(result).toBe(mockUpdatedUser);
     });
   });

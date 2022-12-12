@@ -15,10 +15,15 @@ export class UpdateUserDTO {
   @IsNotEmpty()
   @Length(4, 32)
   username: string;
-  
-  @ApiProperty({ example: 'user', default: 'user', description: 'user or admin', required: false })
+
+  @ApiProperty({
+    example: 'user',
+    default: 'user',
+    description: 'user or admin',
+    required: false,
+  })
   @IsOptional()
-  @IsEnum(Roles, { message: 'Role must be user or admin'})
+  @IsEnum(Roles, { message: 'Role must be user or admin' })
   role: Roles;
 
   @ApiProperty({ example: '12345678', required: false })

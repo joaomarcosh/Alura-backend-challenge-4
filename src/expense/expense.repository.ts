@@ -28,8 +28,12 @@ export class ExpenseRepository extends Repository<Expense> {
       .getOne();
     return result ? false : true;
   }
-  
-  async findByMonth(userId: number, year: string, month: string): Promise<ReturnExpenseDTO[]> {
+
+  async findByMonth(
+    userId: number,
+    year: string,
+    month: string,
+  ): Promise<ReturnExpenseDTO[]> {
     return await this.dataSource
       .createQueryBuilder()
       .select('expense')
@@ -37,6 +41,6 @@ export class ExpenseRepository extends Repository<Expense> {
       .where('EXTRACT("year" from  date) = :year', { year })
       .andWhere('EXTRACT("month" from  date) = :month', { month })
       .andWhere('expense.userId = :userId', { userId })
-      .getMany()
+      .getMany();
   }
 }

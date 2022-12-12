@@ -13,7 +13,8 @@ describe('SummaryController: ', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SummaryController],
-    }).useMocker((token) => {
+    })
+      .useMocker((token) => {
         //define return values here
         if (token == SummaryService) {
           return {
@@ -37,12 +38,12 @@ describe('SummaryController: ', () => {
   it('should be defined', () => {
     expect(summaryController).toBeDefined();
   });
-  
+
   describe('getSummary(): ', () => {
     it('should return summary of specified month', async () => {
-      const result = await summaryController.getSummary(1,'2022','10');
+      const result = await summaryController.getSummary(1, '2022', '10');
 
-      expect(summaryService.getSummary).toHaveBeenCalledWith(1,'2022','10');
+      expect(summaryService.getSummary).toHaveBeenCalledWith(1, '2022', '10');
       expect(result).toBe(mockSummary);
     });
   });

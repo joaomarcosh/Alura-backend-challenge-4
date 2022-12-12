@@ -52,14 +52,14 @@ describe('incomeService: ', () => {
       expect(incomeRepository.findBy).toHaveBeenCalledWith({ userId: 1 });
       expect(result).toEqual(mockReturnedIncome);
     });
-    
+
     it('should return all income with matching description', async () => {
       incomeRepository.findBy.mockResolvedValue(mockReturnedIncome);
 
-      const result = await incomeService.findAll(1,'test%20income');
+      const result = await incomeService.findAll(1, 'test%20income');
 
       expect(incomeRepository.findBy).toHaveBeenCalledWith({
-        userId: 1, 
+        userId: 1,
         description: ILike('test%20income'),
       });
       expect(result).toEqual(mockReturnedIncome);
@@ -70,7 +70,7 @@ describe('incomeService: ', () => {
     it('should return one income', async () => {
       incomeRepository.findOneBy.mockResolvedValue(mockReturnedIncome);
 
-      const result = await incomeService.findOneById(1,1);
+      const result = await incomeService.findOneById(1, 1);
 
       expect(incomeRepository.findOneBy).toHaveBeenCalledWith({
         id: 1,
@@ -79,14 +79,14 @@ describe('incomeService: ', () => {
       expect(result).toEqual(mockReturnedIncome);
     });
   });
-  
+
   describe('findByMonth(): ', () => {
     it('should return all income from the specified month', async () => {
       incomeRepository.findByMonth.mockResolvedValue(mockReturnedIncome);
 
-      const result = await incomeService.findByMonth(1,2022,10);
+      const result = await incomeService.findByMonth(1, 2022, 10);
 
-      expect(incomeRepository.findByMonth).toHaveBeenCalledWith(1,2022,10);
+      expect(incomeRepository.findByMonth).toHaveBeenCalledWith(1, 2022, 10);
       expect(result).toEqual(mockReturnedIncome);
     });
   });
@@ -97,7 +97,7 @@ describe('incomeService: ', () => {
       incomeRepository.insert.mockResolvedValue({ identifiers: [{ id: 1 }] });
       incomeRepository.find.mockResolvedValue(mockReturnedIncome);
 
-      const result = await incomeService.create(1,mockIncome);
+      const result = await incomeService.create(1, mockIncome);
 
       expect(incomeRepository.insert).toHaveBeenCalledWith({
         ...mockIncome,
@@ -145,7 +145,7 @@ describe('incomeService: ', () => {
       incomeRepository.findOneBy.mockResolvedValue(mockIncome);
       incomeRepository.delete.mockResolvedValue({ affected: 1 });
 
-      const result = await incomeService.delete(1,1);
+      const result = await incomeService.delete(1, 1);
 
       expect(incomeRepository.findOneBy).toHaveBeenCalledWith({
         id: 1,

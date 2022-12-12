@@ -17,15 +17,15 @@ export class Expense {
   @Exclude()
   @PrimaryGeneratedColumn()
   id: number;
-  
+
   @Exclude()
-  @ManyToOne(() => User, { onDelete: "CASCADE"})
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @Column()
   userId: number;
 
   @Column()
   description: string;
-  
+
   @Column({ default: ExpenseCategories.OTHER })
   category: string;
 

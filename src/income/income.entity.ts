@@ -16,9 +16,9 @@ export class Income {
   @Exclude()
   @PrimaryGeneratedColumn()
   id: number;
-  
+
   @Exclude()
-  @ManyToOne(() => User, { onDelete: "CASCADE"})
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @Column()
   userId: number;
 

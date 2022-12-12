@@ -1,5 +1,5 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import { NestFactory } from '@nestjs/core';
 import {
@@ -24,7 +24,7 @@ async function bootstrap() {
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.setGlobalPrefix('api');
-  
+
   const config = new DocumentBuilder()
     .setTitle('Alura backend challenge 4')
     .setDescription('Challenge API')
@@ -40,9 +40,11 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3000;
   await app.listen(port, ServerConfig[process.env.NODE_ENV]['host']);
-  
+
   const userService = await app.get(UserService);
-  const adminExists = await userService.findOneByUsername(process.env.ADMIN_USER);
+  const adminExists = await userService.findOneByUsername(
+    process.env.ADMIN_USER,
+  );
   if (!adminExists) {
     userService.create({
       username: process.env.ADMIN_USER,

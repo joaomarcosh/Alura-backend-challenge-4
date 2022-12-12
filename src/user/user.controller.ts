@@ -24,23 +24,21 @@ import { UpdateUserDTO } from './dtos/update-user.dto';
 @ApiTags('User Controller')
 @UseInterceptors(ClassSerializerInterceptor)
 @Role(Roles.Admin)
-@UseGuards(JwtAuthGuard,RoleGuard)
+@UseGuards(JwtAuthGuard, RoleGuard)
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
-  
+
   @Get()
   async findAll(): Promise<User[]> {
     return await this.userService.findAll();
   }
 
   @Get(':id')
-  async findOneById(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<User> {
+  async findOneById(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return await this.userService.findOneById(id);
   }
-  
+
   @Post()
   async create(@Body() user: CreateUserDTO): Promise<User[]> {
     return await this.userService.create(user);

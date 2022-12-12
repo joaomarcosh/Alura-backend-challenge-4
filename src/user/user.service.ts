@@ -11,7 +11,7 @@ export class UserService {
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
   ) {}
-  
+
   async findAll(): Promise<User[]> {
     return await this.userRepository.find();
   }
@@ -19,11 +19,11 @@ export class UserService {
   async findOneById(id: number): Promise<User> {
     return await this.userRepository.findOneBy({ id });
   }
-  
+
   async findOneByUsername(username: string): Promise<User> {
     return await this.userRepository.findOneBy({ username });
   }
-  
+
   async create(user: CreateUserDTO): Promise<User[]> {
     const insertResult = await this.userRepository.createUser(user);
     const createdUser = await this.userRepository.find({
@@ -31,7 +31,7 @@ export class UserService {
     });
     return createdUser;
   }
-  
+
   async update(id: number, newInfo: UpdateUserDTO): Promise<User> {
     await this.userRepository.update(id, newInfo);
     return await this.userRepository.findOneBy({ id });
@@ -39,8 +39,7 @@ export class UserService {
 
   async delete(id: number): Promise<string> {
     const deleteResult = await this.userRepository.delete(id);
-    if (deleteResult.affected == 0)
-      return `User with id ${id} does not exist`;
+    if (deleteResult.affected == 0) return `User with id ${id} does not exist`;
     return `User with id ${id} deleted`;
   }
 }

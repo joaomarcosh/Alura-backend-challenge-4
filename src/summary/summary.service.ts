@@ -9,26 +9,45 @@ export class SummaryService {
     private expenseService: ExpenseService,
     private incomeService: IncomeService,
   ) {}
-  
+
   async getSummary(userId: number, year: string, month: string) {
-    const monthlyExpenses = await this.expenseService.findByMonth(userId, year, month);
-    const totalExpenseAmount = monthlyExpenses.reduce((total,expense) => total + expense.amount, 0);
-    
-    const monthlyIncomes = await this.incomeService.findByMonth(userId, year, month);
-    const totalIncomeAmount = monthlyIncomes.reduce((total,income) => total + income.amount, 0);
-    
+    const monthlyExpenses = await this.expenseService.findByMonth(
+      userId,
+      year,
+      month,
+    );
+    const totalExpenseAmount = monthlyExpenses.reduce(
+      (total, expense) => total + expense.amount,
+      0,
+    );
+
+    const monthlyIncomes = await this.incomeService.findByMonth(
+      userId,
+      year,
+      month,
+    );
+    const totalIncomeAmount = monthlyIncomes.reduce(
+      (total, income) => total + income.amount,
+      0,
+    );
+
     const finalBalance = totalIncomeAmount - totalExpenseAmount;
-    
+
     const expenseAmountByCategory = {};
-    
-    Object.values(ExpenseCategories).forEach(category => {
+
+    Object.values(ExpenseCategories).forEach((category) => {
       expenseAmountByCategory[category] = 0;
     });
-    
-    monthlyExpenses.forEach(expense => {
-      expenseAmountByCategory[expense.category] =+ expense.amount;
+
+    monthlyExpenses.forEach((expense) => {
+      expenseAmountByCategory[expense.category] = +expense.amount;
     });
-    
-    return {totalExpenseAmount, totalIncomeAmount, finalBalance, expenseAmountByCategory};
+
+    return {
+      totalExpenseAmount,
+      totalIncomeAmount,
+      finalBalance,
+      expenseAmountByCategory,
+    };
   }
 }

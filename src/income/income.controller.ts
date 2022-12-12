@@ -29,7 +29,10 @@ export class IncomeController {
 
   @ApiQuery({ name: 'description', required: false })
   @Get()
-  async findAll(@UserId() userId: number, @Query('description') description: string): Promise<ReturnIncomeDTO[]> {
+  async findAll(
+    @UserId() userId: number,
+    @Query('description') description: string,
+  ): Promise<ReturnIncomeDTO[]> {
     return await this.incomeService.findAll(userId, description);
   }
 
@@ -40,14 +43,21 @@ export class IncomeController {
   ): Promise<ReturnIncomeDTO> {
     return await this.incomeService.findOneById(userId, id);
   }
-  
+
   @Get(':year/:month')
-  async findByMonth(@UserId() userId: number, @Param('year') year: string, @Param('month') month: string): Promise<ReturnIncomeDTO[]> {
-    return await this.incomeService.findByMonth(userId,year,month);
+  async findByMonth(
+    @UserId() userId: number,
+    @Param('year') year: string,
+    @Param('month') month: string,
+  ): Promise<ReturnIncomeDTO[]> {
+    return await this.incomeService.findByMonth(userId, year, month);
   }
 
   @Post()
-  async create(@UserId() userId: number, @Body() income: CreateIncomeDTO): Promise<ReturnIncomeDTO[]> {
+  async create(
+    @UserId() userId: number,
+    @Body() income: CreateIncomeDTO,
+  ): Promise<ReturnIncomeDTO[]> {
     return await this.incomeService.create(userId, income);
   }
 
@@ -61,7 +71,10 @@ export class IncomeController {
   }
 
   @Delete(':id')
-  async delete(@UserId() userId: number, @Param('id', ParseIntPipe) id: number): Promise<string> {
+  async delete(
+    @UserId() userId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<string> {
     return await this.incomeService.delete(userId, id);
   }
 }

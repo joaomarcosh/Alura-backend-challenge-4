@@ -22,7 +22,7 @@ import dbConfig from './config/database.config';
     ExpenseModule,
     SummaryModule,
     UserModule,
-    AuthModule
+    AuthModule,
   ],
   controllers: [],
   providers: [],

@@ -23,9 +23,9 @@ describe('SummaryController (e2e)', () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-    .overrideGuard(JwtAuthGuard)
-    .useClass(MockJwtGuard)
-    .compile();
+      .overrideGuard(JwtAuthGuard)
+      .useClass(MockJwtGuard)
+      .compile();
 
     app = moduleRef.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),
@@ -36,7 +36,7 @@ describe('SummaryController (e2e)', () => {
     await app.register(fastifyCookie);
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
-    
+
     const userService = await app.get(UserService);
     await userService.create({
       username: 'user',
@@ -48,11 +48,11 @@ describe('SummaryController (e2e)', () => {
     const incomeService = await app.get(IncomeService);
     await incomeService.create(1, mockIncome);
   });
-  
+
   afterAll(async () => {
     await app.close();
   });
-  
+
   describe('/summary/:year/:month (GET)', () => {
     it('should return status 200 and summary of specified month', () => {
       return app

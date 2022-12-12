@@ -12,15 +12,15 @@ import { RoleGuard } from '../src/auth/role/role.guard';
 describe('UserController (e2e)', () => {
   let app: NestFastifyApplication;
 
-  beforeAll(async () => {  
+  beforeAll(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-    .overrideGuard(JwtAuthGuard)
-    .useValue({})
-    .overrideGuard(RoleGuard)
-    .useValue({})
-    .compile();
+      .overrideGuard(JwtAuthGuard)
+      .useValue({})
+      .overrideGuard(RoleGuard)
+      .useValue({})
+      .compile();
 
     app = moduleRef.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),
@@ -31,7 +31,7 @@ describe('UserController (e2e)', () => {
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
   });
-  
+
   afterAll(async () => {
     await app.close();
   });
@@ -56,7 +56,7 @@ describe('UserController (e2e)', () => {
           });
         });
     });
-    
+
     it('should return status 409 and error message', () => {
       return app
         .inject({
@@ -94,7 +94,7 @@ describe('UserController (e2e)', () => {
         });
     });
   });
-  
+
   describe('/user/:id (GET)', () => {
     it('should return status 200 and selected user', () => {
       return app

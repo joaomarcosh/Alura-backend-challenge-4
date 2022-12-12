@@ -28,8 +28,12 @@ export class IncomeRepository extends Repository<Income> {
       .getOne();
     return result ? false : true;
   }
-  
-  async findByMonth(userId: number, year: string, month: string): Promise<ReturnIncomeDTO[]> {
+
+  async findByMonth(
+    userId: number,
+    year: string,
+    month: string,
+  ): Promise<ReturnIncomeDTO[]> {
     return await this.dataSource
       .createQueryBuilder()
       .select('income')
@@ -37,6 +41,6 @@ export class IncomeRepository extends Repository<Income> {
       .where('EXTRACT("year" from  date) = :year', { year })
       .andWhere('EXTRACT("month" from  date) = :month', { month })
       .andWhere('income.userId = :userId', { userId })
-      .getMany()
+      .getMany();
   }
 }

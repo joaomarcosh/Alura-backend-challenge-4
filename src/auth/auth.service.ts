@@ -3,7 +3,6 @@ import { UserRepository } from '../user/user.repository';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignupUserDTO } from './dtos/signup-user.dto';
-import { Roles } from '../user/enums/user-roles.enum';
 
 @Injectable()
 export class AuthService {
@@ -20,14 +19,14 @@ export class AuthService {
     }
     return null;
   }
-  
+
   async login(user: any) {
     const payload = { username: user.username, role: user.role, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
-  
+
   async signUp(user: SignupUserDTO) {
     if (user.password != user.passwordConfirmation) {
       throw new UnprocessableEntityException('Passwords do not match');

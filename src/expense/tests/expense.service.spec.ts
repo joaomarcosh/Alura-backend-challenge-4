@@ -52,14 +52,14 @@ describe('expenseService: ', () => {
       expect(expenseRepository.findBy).toHaveBeenCalledWith({ userId: 1 });
       expect(result).toEqual(mockReturnedExpense);
     });
-    
+
     it('should return all expense with matching description', async () => {
       expenseRepository.findBy.mockResolvedValue(mockReturnedExpense);
 
       const result = await expenseService.findAll(1, 'test%20expense');
 
       expect(expenseRepository.findBy).toHaveBeenCalledWith({
-        userId: 1, 
+        userId: 1,
         description: ILike('test%20expense'),
       });
       expect(result).toEqual(mockReturnedExpense);
@@ -70,7 +70,7 @@ describe('expenseService: ', () => {
     it('should return one expense', async () => {
       expenseRepository.findOneBy.mockResolvedValue(mockReturnedExpense);
 
-      const result = await expenseService.findOneById(1,1);
+      const result = await expenseService.findOneById(1, 1);
 
       expect(expenseRepository.findOneBy).toHaveBeenCalledWith({
         id: 1,
@@ -79,14 +79,14 @@ describe('expenseService: ', () => {
       expect(result).toEqual(mockReturnedExpense);
     });
   });
-  
+
   describe('findByMonth(): ', () => {
     it('should return all expense from the specified month', async () => {
       expenseRepository.findByMonth.mockResolvedValue(mockReturnedExpense);
 
-      const result = await expenseService.findByMonth(1,2022,10);
+      const result = await expenseService.findByMonth(1, 2022, 10);
 
-      expect(expenseRepository.findByMonth).toHaveBeenCalledWith(1,2022,10);
+      expect(expenseRepository.findByMonth).toHaveBeenCalledWith(1, 2022, 10);
       expect(result).toEqual(mockReturnedExpense);
     });
   });
@@ -97,7 +97,7 @@ describe('expenseService: ', () => {
       expenseRepository.insert.mockResolvedValue({ identifiers: [{ id: 1 }] });
       expenseRepository.find.mockResolvedValue(mockReturnedExpense);
 
-      const result = await expenseService.create(1,mockExpense);
+      const result = await expenseService.create(1, mockExpense);
 
       expect(expenseRepository.insert).toHaveBeenCalledWith({
         ...mockExpense,
@@ -145,7 +145,7 @@ describe('expenseService: ', () => {
       expenseRepository.findOneBy.mockResolvedValue(mockExpense);
       expenseRepository.delete.mockResolvedValue({ affected: 1 });
 
-      const result = await expenseService.delete(1,1);
+      const result = await expenseService.delete(1, 1);
 
       expect(expenseRepository.findOneBy).toHaveBeenCalledWith({
         id: 1,

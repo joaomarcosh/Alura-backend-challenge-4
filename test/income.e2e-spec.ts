@@ -19,9 +19,9 @@ describe('IncomeController (e2e)', () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-    .overrideGuard(JwtAuthGuard)
-    .useClass(MockJwtGuard)
-    .compile();
+      .overrideGuard(JwtAuthGuard)
+      .useClass(MockJwtGuard)
+      .compile();
 
     app = moduleRef.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),
@@ -32,7 +32,7 @@ describe('IncomeController (e2e)', () => {
     await app.register(fastifyCookie);
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
-    
+
     const userService = await app.get(UserService);
     await userService.create({
       username: 'user',
@@ -40,7 +40,7 @@ describe('IncomeController (e2e)', () => {
       role: Roles.User,
     });
   });
-  
+
   afterAll(async () => {
     await app.close();
   });
@@ -92,7 +92,7 @@ describe('IncomeController (e2e)', () => {
           });
         });
     });
-    
+
     it('should return status 200 and all incomes with matching description', () => {
       return app
         .inject({
@@ -115,7 +115,7 @@ describe('IncomeController (e2e)', () => {
         });
     });
   });
-  
+
   describe('/income/:id (GET)', () => {
     it('should return status 200 and selected income', () => {
       return app
@@ -137,7 +137,7 @@ describe('IncomeController (e2e)', () => {
         });
     });
   });
-  
+
   describe('/income/:year/:month (GET)', () => {
     it('should return status 200 and all incomes from specified month', () => {
       return app
@@ -150,17 +150,17 @@ describe('IncomeController (e2e)', () => {
 
           const results = JSON.parse(response.payload);
 
-          results.forEach(r => {
+          results.forEach((r) => {
             r.date = new Date(r.date);
             expect(r).toMatchObject({
               description: expect.any(String),
               amount: expect.any(Number),
               date: expect.any(Date),
             });
-          })
+          });
         });
     });
-    
+
     it('should return status 200 and empty array', () => {
       return app
         .inject({

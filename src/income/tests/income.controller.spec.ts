@@ -51,9 +51,9 @@ describe('IncomeController: ', () => {
 
   describe('findAll(): ', () => {
     it('should return all income', async () => {
-      const result = await incomeController.findAll(1,'test');
+      const result = await incomeController.findAll(1, 'test');
 
-      expect(incomeService.findAll).toHaveBeenCalledWith(1,'test');
+      expect(incomeService.findAll).toHaveBeenCalledWith(1, 'test');
       expect(result).toBe(mockReturnedIncome);
     });
   });
@@ -66,12 +66,12 @@ describe('IncomeController: ', () => {
       expect(result).toBe(mockReturnedIncome);
     });
   });
-  
+
   describe('findByMonth(): ', () => {
     it('should return all income from the specified month', async () => {
-      const result = await incomeController.findByMonth(1,2022,10);
+      const result = await incomeController.findByMonth(1, 2022, 10);
 
-      expect(incomeService.findByMonth).toHaveBeenCalledWith(1,2022,10);
+      expect(incomeService.findByMonth).toHaveBeenCalledWith(1, 2022, 10);
       expect(result).toBe(mockReturnedIncome);
     });
   });

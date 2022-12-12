@@ -8,7 +8,10 @@ import { ValidationPipe } from '@nestjs/common';
 import fastifyCookie from '@fastify/cookie';
 import { UserService } from '../src/user/user.service';
 import { Roles } from '../src/user/enums/user-roles.enum';
-import { mockExpense, mockExpenseWithoutCategory } from '../src/expense/tests/expense-data.mock';
+import {
+  mockExpense,
+  mockExpenseWithoutCategory,
+} from '../src/expense/tests/expense-data.mock';
 import { JwtAuthGuard } from '../src/auth/jwt/jwt-auth.guard';
 import { MockJwtGuard } from './mocks/mock-jwt.guard';
 
@@ -19,9 +22,9 @@ describe('ExpenseController (e2e)', () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-    .overrideGuard(JwtAuthGuard)
-    .useClass(MockJwtGuard)
-    .compile();
+      .overrideGuard(JwtAuthGuard)
+      .useClass(MockJwtGuard)
+      .compile();
 
     app = moduleRef.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),
@@ -34,7 +37,7 @@ describe('ExpenseController (e2e)', () => {
     });
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
-    
+
     const userService = await app.get(UserService);
     await userService.create({
       username: 'user',
@@ -42,7 +45,7 @@ describe('ExpenseController (e2e)', () => {
       role: Roles.User,
     });
   });
-  
+
   afterAll(async () => {
     await app.close();
   });
@@ -71,7 +74,7 @@ describe('ExpenseController (e2e)', () => {
           });
         });
     });
-    
+
     it('should return status 201 and created expense with category other', () => {
       return app
         .inject({
@@ -120,7 +123,7 @@ describe('ExpenseController (e2e)', () => {
           });
         });
     });
-    
+
     it('should return status 200 and all expenses with matching description', () => {
       return app
         .inject({
@@ -144,7 +147,7 @@ describe('ExpenseController (e2e)', () => {
         });
     });
   });
-  
+
   describe('/expense/:id (GET)', () => {
     it('should return status 200 and selected expense', () => {
       return app
@@ -167,7 +170,7 @@ describe('ExpenseController (e2e)', () => {
         });
     });
   });
-  
+
   describe('/expense/:year/:month (GET)', () => {
     it('should return status 200 and all expenses from specified month', () => {
       return app
@@ -180,7 +183,7 @@ describe('ExpenseController (e2e)', () => {
 
           const results = JSON.parse(response.payload);
 
-          results.forEach(r => {
+          results.forEach((r) => {
             r.date = new Date(r.date);
             expect(r).toMatchObject({
               description: expect.any(String),
@@ -188,10 +191,10 @@ describe('ExpenseController (e2e)', () => {
               amount: expect.any(Number),
               date: expect.any(Date),
             });
-          })
+          });
         });
     });
-    
+
     it('should return status 200 and empty array', () => {
       return app
         .inject({
